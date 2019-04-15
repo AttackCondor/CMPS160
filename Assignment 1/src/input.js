@@ -27,7 +27,7 @@ class InputHandler {
         // Print x,y coordinates.
         console.log(ev.clientX, ev.clientY);
 
-        var shape = new Triangle(shader, ev.clientX, ev.clientY, 5);
-        this.scene.addGeometry(shape, ev.clientX, ev.clientY);
+        var shape = new Triangle(shader);
+        this.scene.addGeometry(shape);
     }
 }
