@@ -18,6 +18,7 @@ class InputHandler {
 
       // Mouse Events
       this.canvas.onmousedown = function(ev) { _inputHandler.click(ev) };
+      document.getElementById("clear").onclick = function() { _inputHandler.scene.clearGeometries();};
     }
 
     /**
@@ -26,8 +27,16 @@ class InputHandler {
     click(ev) {
         // Print x,y coordinates.
         console.log(ev.clientX, ev.clientY);
+        var x = (ev.clientX - (canvas.height/2))/(canvas.height/2);
+        var y = ((canvas.height/2) - ev.clientY)/(canvas.height/2);
+        var size = (document.getElementById("Size").value)/100;
+        var red = document.getElementById("Red").value;
+        var green = document.getElementById("Green").value;
+        var blue = document.getElementById("Blue").value;
+        var segments = document.getElementById("Segments").value;
 
-        var shape = new Triangle(shader, 0, 0, .6);
+        var shape = new Triangle(shader, x, y, size);
         this.scene.addGeometry(shape);
     }
+
 }

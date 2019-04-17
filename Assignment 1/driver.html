@@ -29,12 +29,12 @@
     <canvas id="webgl" width="400" height="400">
       Please use a browser that supports "canvas"
     </canvas>
-	<p> <button onClick="clearScreen()" type="button" id="clear"> Clear Canvas </button> </p>
+	<p> <button onclick="clear()" type="button" id="clear"> Clear Canvas </button> </p>
 	<p> <form>
 			Drawing Mode:<br>
-			<input type="radio" name="gender" value="Triangle" checked> Triangle
-			<input type="radio" name="gender" value="Square"> Square
-			<input type="radio" name="gender" value="Circle"> Circle <br> <br>
+			<input type="radio" name="gender" value="Triangle" id= "triangle" checked> Triangle
+			<input type="radio" name="gender" value="Square" id= "square"> Square
+			<input type="radio" name="gender" value="Circle" id= "circle"> Circle <br> <br>
 			Shape Color:<br>
 			<input type="range" min="1" max="255" value="50" class="slider" id="Red"> Red <br>
 			<input type="range" min="1" max="255" value="50" class="slider" id="Green"> Green <br>
