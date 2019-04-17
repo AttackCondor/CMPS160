@@ -8,7 +8,7 @@ var _inputHandler = null;
  */
 class InputHandler {
     /**
-     * Initializes the event handeling functions within the program.
+     * Initializes the event handling functions within the program.
      */
     constructor(canvas, scene) {
       this.canvas = canvas;
@@ -34,8 +34,14 @@ class InputHandler {
         var green = document.getElementById("Green").value;
         var blue = document.getElementById("Blue").value;
         var segments = document.getElementById("Segments").value;
+        var color = [red, green, blue];
 
-        var shape = new Triangle(shader, x, y, size);
+        if(document.getElementById("triangle").checked){
+          var shape = new Triangle(shader, x, y, size, color);
+        }
+        else if(document.getElementById("square").checked){
+          var shape = new Square(shader, x, y, size, color);
+        }
         this.scene.addGeometry(shape);
     }
 
