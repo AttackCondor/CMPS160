@@ -42,6 +42,9 @@ class InputHandler {
         else if(document.getElementById("square").checked){
           var shape = new Square(shader, x, y, size, color);
         }
+        else if(document.getElementById("circle").checked){
+          var shape = new Circle(shader, x, y, size, color, segments);
+        }
         this.scene.addGeometry(shape);
     }
 
