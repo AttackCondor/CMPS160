@@ -22,10 +22,6 @@ function main() {
   shader.addAttribute("a_Position");
   shader.addAttribute("a_Color");
 
-  // Add uniforms
-  var idMatrix = new Matrix4();
-  shader.addUniform("u_ModelMatrix", "mat4", idMatrix.elements);
-
   // Initialize renderer with scene and camera
   renderer = new Renderer(gl, scene, null);
   renderer.start();

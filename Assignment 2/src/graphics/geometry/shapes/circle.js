@@ -20,10 +20,22 @@ class Circle extends Geometry {
         this.size = size;
         this.color = color;
         this.segments = segments;
+        this.xmov = ((Math.random()*2) -1)/20;
+        this.ymov = ((Math.random()*2) -1)/20;
   
         this.vertices = this.generateCircleVertices(x, y, size, color, segments);
-        this.faces = {0: this.vertices};
-  
+        this.faces = { 0: [0, 1, 2] };
+
+        this.rotationMatrix = new Matrix4();
+        this.translationMatrix = new Matrix4();
+        this.scalingMatrix = new Matrix4();
+        this.originMatrix = new Matrix4();
+        this.positionMatrix = new Matrix4();
+
+        this.originMatrix.setTranslate(-1*x, -1*y, 0);
+        this.positionMatrix.setTranslate(x, y, 0);
+        this.translationMatrix.setTranslate(this.xmov, this.ymov, 0);
+        this.time = 0;
         // CALL THIS AT THE END OF ANY SHAPE CONSTRUCTOR
         this.interleaveVertices();
     }
@@ -45,5 +57,29 @@ class Circle extends Geometry {
   
         return vertices;
     }
+    render() {
+        this.time+=1;
+        this.x += this.xmov;
+        this.y += this.ymov;
+        if (this.time%20 == 0) {
+            this.xmov = ((Math.random()) -.5)/30;
+            this.ymov = ((Math.random()) -.5)/30;
+        }
+        if(this.x >= 1) this.xmov= ((Math.random()/2)*-1)/30;
+        if(this.x <= -1) this.xmov= (Math.random()/2)/30;
+        if(this.y >= 1) this.ymov= ((Math.random()/2)*-1)/30;
+        if(this.y <= -1) this.ymov= (Math.random()/2)/30;
+
+        this.translationMatrix.setTranslate(this.xmov, this.ymov, 0);
+        
+
+        this.modelMatrix = this.modelMatrix.multiply(this.positionMatrix);
+        this.modelMatrix = this.modelMatrix.multiply(this.rotationMatrix);
+        this.modelMatrix = this.modelMatrix.multiply(this.translationMatrix);
+        this.modelMatrix = this.modelMatrix.multiply(this.scalingMatrix);
+        this.modelMatrix = this.modelMatrix.multiply(this.originMatrix);
+    
+        this.shader.setUniform("u_ModelMatrix", this.modelMatrix.elements);
+      }
   }
   

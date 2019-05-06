@@ -8,19 +8,20 @@ var _inputHandler = null;
  */
 class InputHandler {
     /**
-     * Initializes the event handeling functions within the program.
+     * Initializes the event handling functions within the program.
      */
+
     constructor(canvas, scene) {
       this.canvas = canvas;
       this.scene = scene;
 
       _inputHandler = this;
-
+      var mouseheld = false;
       // Mouse Events
-      this.canvas.onmousedown = function(ev) { _inputHandler.click(ev) };
-      this.canvas.onmousemove = function(ev) { };
-
-      // Button Events
+      this.canvas.onmousedown = function(ev) { this.mouseheld = true; _inputHandler.click(ev);};
+      this.canvas.onmouseup   = function() { this.mouseheld = false;};
+      this.canvas.onmousemove = function(ev) { if(this.mouseheld){_inputHandler.click(ev)} };
+      document.getElementById("clear").onclick = function() { console.log("Clearing");  _inputHandler.scene.clearGeometries();};
       document.getElementById('fileLoad').onclick = function() { _inputHandler.readSelectedFile() };
     }
 
@@ -57,23 +58,24 @@ class InputHandler {
       
     }
 
-    /**
+        /**
      * Function called to read a selected file.
      */
     readSelectedFile() {
-        var fileReader = new FileReader();
-        var objFile = document.getElementById("fileInput").files[0];
+      var fileReader = new FileReader();
+      var objFile = document.getElementById("fileInput").files[0];
 
-        if (!objFile) {
-            alert("OBJ file not set!");
-            return;
-        }
+      if (!objFile) {
+          alert("OBJ file not set!");
+          return;
+      }
 
-        fileReader.readAsText(objFile);
-        fileReader.onloadend = function() {
-            // alert(fileReader.result);
-            var customObj = new CustomOBJ(shader, fileReader.result);
-            _inputHandler.scene.addGeometry(customObj);
-        }
-    }
+      fileReader.readAsText(objFile);
+      fileReader.onloadend = function() {
+          // alert(fileReader.result);
+          var customObj = new CustomOBJ(shader, fileReader.result);
+          _inputHandler.scene.addGeometry(customObj);
+      }
+  }
+
 }
