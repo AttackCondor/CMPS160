@@ -18,8 +18,6 @@ class CustomOBJ extends Geometry {
   constructor(shader, objStr, imgPath) {
     super(shader);
 
-    this.modelMatrix = new Matrix4();
-
     // If an image path/data url is provided, then load/save that image as a texture
     if (imgPath != null) {
       var self = this;
@@ -35,8 +33,7 @@ class CustomOBJ extends Geometry {
       this.vertices[i] = new Vertex();
     }
 
-    this.rotationMatrix = new Matrix4();
-    this.rotationMatrix.setRotate(5, 0, 1, 0);
+    this.modelMatrix = new Matrix4();
 
     // Add the vertex points, normals, and uv coordinates in OBJ
     var transAndScaleVal = this.addVertexPoints(objMesh.indices, objMesh.vertices);
@@ -133,10 +130,10 @@ class CustomOBJ extends Geometry {
    * @param {Array} textures The textures being added
    */
   addVertexTextureCoordinates(indices, textures) {
-    // If textures information is invalid, set vertex.uv to null for all vertices.
+    // If textures information is invalid, set vertex.texCoord to null for all vertices.
     if (this.isInvalidParameter(textures)) {
       for (var i = 0; i < indices.length; i++) {
-        this.vertices[i].uv = null;
+        this.vertices[i].texCoord = null;
       }
     }
     else {
@@ -144,7 +141,7 @@ class CustomOBJ extends Geometry {
         var index = indices[i];
         var uv = [textures[index * 2], textures[index * 2 + 1]];
 
-        this.vertices[i].uv = uv;
+        this.vertices[i].texCoord = uv;
       }
     }
   }
@@ -192,12 +189,5 @@ class CustomOBJ extends Geometry {
     var scaleMatrix = new Matrix4();
     scaleMatrix.setScale(scaleValue, scaleValue, scaleValue);
     this.modelMatrix = scaleMatrix.multiply(this.modelMatrix);
-  }
-
-  render() {
-
-    this.modelMatrix = this.modelMatrix.multiply(this.rotationMatrix);
-    
-    this.shader.setUniform("u_ModelMatrix", this.modelMatrix.elements);
   }
 }

@@ -17,11 +17,12 @@ class InputHandler {
       _inputHandler = this;
 
       // Mouse Events
-      this.canvas.onmousedown = function(ev) { _inputHandler.click(ev) };
-      this.canvas.onmousemove = function(ev) { };
-
-      // Button Events
+      this.canvas.onmousedown = function(ev) { this.mouseheld = true; _inputHandler.click(ev);};
+      this.canvas.onmouseup   = function() { this.mouseheld = false;};
+      this.canvas.onmousemove = function(ev) { if(this.mouseheld){_inputHandler.click(ev)} };
+      document.getElementById("clear").onclick = function() { console.log("Clearing");  _inputHandler.scene.clearGeometries();};
       document.getElementById('fileLoad').onclick = function() { _inputHandler.readSelectedFile() };
+
     }
 
     /**
@@ -71,7 +72,7 @@ class InputHandler {
 
         fileReader.readAsText(objFile);
         fileReader.onloadend = function() {
-            // alert(fileReader.result);
+            alert(fileReader.result);
             var customObj = new CustomOBJ(shader, fileReader.result);
             _inputHandler.scene.addGeometry(customObj);
         }
