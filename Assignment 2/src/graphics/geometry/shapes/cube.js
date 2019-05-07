@@ -34,9 +34,8 @@ class Cube extends Geometry {
 
     this.originMatrix.setTranslate(-1 * x, -1 * y, 0);
     this.positionMatrix.setTranslate(x, y, 0);
-    this.initMatrix.setRotate(-25,1,0,0);
     this.renitMatrix.setRotate(25,1,0,0);
-    this.rotationMatrix.setRotate(5, 0, 1, 0);
+    this.rotationMatrix.setRotate(5, 0, 5, 0);
 
     this.time = 0;
     // CALL THIS AT THE END OF ANY SHAPE CONSTRUCTOR
@@ -48,64 +47,67 @@ class Cube extends Geometry {
     console.log(color);
 
     //front
-    vertices.push(new Vertex(x - size, y - size, size/2, color));
-    vertices.push(new Vertex(x + size, y - size, size/2,color));
-    vertices.push(new Vertex(x + size, y + size, size/2, color));
-    vertices.push(new Vertex(x - size, y + size, size/2, color));
-    vertices.push(new Vertex(x + size, y + size, size/2, color));
-    vertices.push(new Vertex(x - size, y - size, size/2, color));
+    vertices.push(new Vertex(x - size, y - size, size, color));
+    vertices.push(new Vertex(x + size, y - size, size,color));
+    vertices.push(new Vertex(x + size, y + size, size, color));
+    vertices.push(new Vertex(x - size, y + size, size, color));
+    vertices.push(new Vertex(x + size, y + size, size, color));
+    vertices.push(new Vertex(x - size, y - size, size, color));
 
     //back
-    vertices.push(new Vertex(x - size, y - size, size/-2, color));
-    vertices.push(new Vertex(x + size, y - size, size/-2, color));
-    vertices.push(new Vertex(x + size, y + size, size/-2, color));
-    vertices.push(new Vertex(x - size, y + size, size/-2, color));
-    vertices.push(new Vertex(x + size, y + size, size/-2, color));
-    vertices.push(new Vertex(x - size, y - size, size/-2, color));
+    vertices.push(new Vertex(x - size, y - size, -1*size, color));
+    vertices.push(new Vertex(x + size, y - size, -1*size, color));
+    vertices.push(new Vertex(x + size, y + size, -1*size, color));
+    vertices.push(new Vertex(x - size, y + size, -1*size, color));
+    vertices.push(new Vertex(x + size, y + size, -1*size, color));
+    vertices.push(new Vertex(x - size, y - size, -1*size, color));
 
     //rside
-    vertices.push(new Vertex(x + size, y - size, size/-2, color));
-    vertices.push(new Vertex(x + size, y - size, size/2, color));
-    vertices.push(new Vertex(x + size, y + size, size/-2, color));
-    vertices.push(new Vertex(x + size, y + size, size/2, color));
-    vertices.push(new Vertex(x + size, y + size, size/-2, color));
-    vertices.push(new Vertex(x + size, y - size, size/2, color));
+    vertices.push(new Vertex(x + size, y - size, -1*size, color));
+    vertices.push(new Vertex(x + size, y - size, size, color));
+    vertices.push(new Vertex(x + size, y + size, -1*size, color));
+    vertices.push(new Vertex(x + size, y + size, size, color));
+    vertices.push(new Vertex(x + size, y + size, -1*size, color));
+    vertices.push(new Vertex(x + size, y - size, size, color));
 
     //lside
-    vertices.push(new Vertex(x - size, y - size, size/-2, color));
-    vertices.push(new Vertex(x - size, y - size, size/2, color));
-    vertices.push(new Vertex(x - size, y + size, size/-2, color));
-    vertices.push(new Vertex(x - size, y + size, size/2, color));
-    vertices.push(new Vertex(x - size, y + size, size/-2, color));
-    vertices.push(new Vertex(x - size, y - size, size/2, color));
+    vertices.push(new Vertex(x - size, y - size, -1*size, color));
+    vertices.push(new Vertex(x - size, y - size, size, color));
+    vertices.push(new Vertex(x - size, y + size, -1*size, color));
+    vertices.push(new Vertex(x - size, y + size, size, color));
+    vertices.push(new Vertex(x - size, y + size, -1*size, color));
+    vertices.push(new Vertex(x - size, y - size, size, color));
 
     //topside
-    vertices.push(new Vertex(x - size, y + size, size/-2, color));
-    vertices.push(new Vertex(x + size, y + size, size/2, color));
-    vertices.push(new Vertex(x + size, y + size, size/-2, color));
-    vertices.push(new Vertex(x - size, y + size, size/2, color));
-    vertices.push(new Vertex(x + size, y + size, size/-2, color));
-    vertices.push(new Vertex(x - size, y + size, size/2, color));
+    vertices.push(new Vertex(x - size, y + size, -1*size, color));
+    vertices.push(new Vertex(x + size, y + size, size, color));
+    vertices.push(new Vertex(x + size, y + size, -1*size, color));
+    vertices.push(new Vertex(x - size, y + size, size, color));
+    vertices.push(new Vertex(x + size, y + size, size, color));
+    vertices.push(new Vertex(x - size, y + size, -1*size, color));
 
     //botside
-    vertices.push(new Vertex(x - size, y - size, size/-2, color));
-    vertices.push(new Vertex(x + size, y - size, size/2, color));
-    vertices.push(new Vertex(x + size, y - size, size/-2, color));
-    vertices.push(new Vertex(x - size, y - size, size/2, color));
-    vertices.push(new Vertex(x + size, y - size, size/-2, color));
-    vertices.push(new Vertex(x - size, y - size, size/2, color));
+    vertices.push(new Vertex(x - size, y - size, -1*size, color));
+    vertices.push(new Vertex(x + size, y - size, size, color));
+    vertices.push(new Vertex(x + size, y - size, -1*size, color));
+    vertices.push(new Vertex(x - size, y - size, size, color));
+    vertices.push(new Vertex(x + size, y - size, size, color));
+    vertices.push(new Vertex(x - size, y - size, -1*size, color));
 
     return vertices;
   }
 
   render() {
 
-    if(this.time != 0)this.modelMatrix.multiply(this.renitMatrix);
-    
+    if(this.time == 0){
+    this.modelMatrix.multiply(this.renitMatrix);
+    this.time ++;
+    }
+    else{
     this.modelMatrix = this.modelMatrix.multiply(this.positionMatrix);
-    this.modelMatrix = this.modelMatrix.multiply(this.initMatrix);
     this.modelMatrix = this.modelMatrix.multiply(this.rotationMatrix);
     this.modelMatrix = this.modelMatrix.multiply(this.originMatrix);
+    }
 
     this.shader.setUniform("u_ModelMatrix", this.modelMatrix.elements);
   }
