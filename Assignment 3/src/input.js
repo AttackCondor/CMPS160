@@ -26,8 +26,8 @@ class InputHandler {
     //button events
     document.getElementById("clear").onclick = function() { _inputHandler.scene.clearGeometries();};
     document.getElementById('fileLoad').onclick = function() { _inputHandler.readSelectedFile() };
-
     document.getElementById('texInput').onchange = function () { _inputHandler.readTexture() };
+    document.getElementById("colorType").onclick = function() {_inputHandler.changeButton()};
   }
 
   /**
@@ -46,15 +46,16 @@ class InputHandler {
      var blue = document.getElementById("Blue").value;
      var segments = document.getElementById("Segments").value;
      var color = [red, green, blue];
+     if(document.getElementById("colorType").value == "Rainbow!") color = null;
 
      if(document.getElementById("spinsquare").checked){
-       var shape = new Square(shader, x, y, size, color);
+       var shape = new Square(shader2, x, y, size, color);
      }
      else if(document.getElementById("fluctriangle").checked){
-       var shape = new Triangle(shader, x, y, size, color);
+       var shape = new Triangle(shader2, x, y, size, color);
      }
      else if(document.getElementById("randcircle").checked){
-       var shape = new Circle(shader, x, y, size, color, segments);
+       var shape = new Circle(shader2, x, y, size, color, segments);
     }
     else if(document.getElementById("tiltcube").checked){
       var shape = new Cube(shader, x, y, size, color);
@@ -100,4 +101,12 @@ class InputHandler {
     image.src = 'objs/' + imgPathSplit[imgPathSplit.length - 1];
     return true;
   }
+
+  changeButton(){
+    if(document.getElementById("colorType").value == "Solid Color")
+      document.getElementById("colorType").value = "Rainbow!";
+    else
+      document.getElementById("colorType").value = "Solid Color";
+  }
 }
+

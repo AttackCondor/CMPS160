@@ -35,6 +35,9 @@ function main() {
     var idMatrix = new Matrix4();
     shader2.addUniform("u_ModelMatrix", "mat4", idMatrix.elements);
 
+
+    var shape = new Cube(shader, 0, 0, .2);
+    scene.addGeometry(shape);
   // Initialize renderer with scene and camera
   renderer = new Renderer(gl, scene, null);
   renderer.start();
