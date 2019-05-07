@@ -17,14 +17,23 @@ function main() {
 
   // Initialize shader
   shader = new Shader(gl, ASG3_VSHADER, ASG3_FSHADER);
+  shader2 = new Shader(gl, ASG1_VSHADER, ASG1_FSHADER);
+
 
   // Add attibutes
   shader.addAttribute("a_Position");
   shader.addAttribute("a_Color");
   shader.addAttribute("a_TexCoord");
 
+  shader2.addAttribute("a_Position");
+  shader2.addAttribute("a_Color");
+
   // Add uniforms
   shader.addUniform("u_Sampler", "sampler2D", 0);
+
+    // Add uniforms
+    var idMatrix = new Matrix4();
+    shader2.addUniform("u_ModelMatrix", "mat4", idMatrix.elements);
 
   // Initialize renderer with scene and camera
   renderer = new Renderer(gl, scene, null);
