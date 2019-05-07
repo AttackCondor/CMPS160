@@ -29,11 +29,11 @@ function main() {
   shader2.addAttribute("a_Color");
 
   // Add uniforms
-  shader.addUniform("u_Sampler", "sampler2D", 0);
 
     // Add uniforms
-    var idMatrix = new Matrix4();
-    shader2.addUniform("u_ModelMatrix", "mat4", idMatrix.elements);
+  var idMatrix = new Matrix4();
+  shader.addUniform("u_Sampler", "sampler2D", 0);
+  shader2.addUniform("u_ModelMatrix", "mat4", idMatrix.elements);
 
 
     var shape = new Cube(shader, 0, 0, .2);
