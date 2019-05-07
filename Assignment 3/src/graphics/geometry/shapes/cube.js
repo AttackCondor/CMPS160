@@ -44,113 +44,60 @@ class Cube extends Geometry {
 
   generateCubeVertices(x, y, size, color) {
     var vertices = []
-    console.log(color);
-    if(!color){
+
     //front
-    var vertex0 = new TexVertex(x - size, y - size, size);
+    var vertex0 = new Vertex(x - size, y - size, size, color);
     vertex0.texCoord = [0.0, 0.0];
-    var vertex1 = new TexVertex(x + size, y - size, size);
+    var vertex1 = new Vertex(x + size, y - size, size,color);
     vertex1.texCoord = [1.0, 0.0];
-    var vertex2 = new TexVertex(x + size, y + size, size);
+    var vertex2 = new Vertex(x + size, y + size, size, color);
     vertex2.texCoord = [0.0, 1.0];
-    var vertex3 = new TexVertex(x - size, y + size, size);
+    var vertex3 = new Vertex(x - size, y + size, size, color);
     vertex3.texCoord = [0.0, 1.0];
-    var vertex4 = new TexVertex(x + size, y + size, size);
+    var vertex4 = new Vertex(x + size, y + size, size, color);
     vertex4.texCoord = [1.0, 1.0];
-    var vertex5 = new TexVertex(x - size, y - size, size);
+    var vertex5 = new Vertex(x - size, y - size, size, color);
     vertex5.texCoord = [0.0, 0.0];
 
     //back
-    var vertex6 = new TexVertex(x - size, y - size, -1*size);
-    var vertex7 = new TexVertex(x + size, y - size, -1*size);
-    var vertex8 = new TexVertex(x + size, y + size, -1*size);
-    var vertex9 = new TexVertex(x - size, y + size, -1*size);
-    var vertex10 = new TexVertex(x + size, y + size, -1*size);
-    var vertex11 = new TexVertex(x - size, y - size, -1*size);
+    var vertex6 = new Vertex(x - size, y - size, -1*size, color);
+    var vertex7 = new Vertex(x + size, y - size, -1*size, color);
+    var vertex8 = new Vertex(x + size, y + size, -1*size, color);
+    var vertex9 = new Vertex(x - size, y + size, -1*size, color);
+    var vertex10 = new Vertex(x + size, y + size, -1*size, color);
+    var vertex11 = new Vertex(x - size, y - size, -1*size, color);
 
     //rside
-    var vertex12 = new TexVertex(x + size, y - size, -1*size);
-    var vertex13 = new TexVertex(x + size, y - size, size);
-    var vertex14 = new TexVertex(x + size, y + size, -1*size);
-    var vertex15 = new TexVertex(x + size, y + size, size);
-    var vertex16 = new TexVertex(x + size, y + size, -1*size);
-    var vertex17 = new TexVertex(x + size, y - size, size);
+    var vertex12 = new Vertex(x + size, y - size, -1*size, color);
+    var vertex13 = new Vertex(x + size, y - size, size, color);
+    var vertex14 = new Vertex(x + size, y + size, -1*size, color);
+    var vertex15 = new Vertex(x + size, y + size, size, color);
+    var vertex16 = new Vertex(x + size, y + size, -1*size, color);
+    var vertex17 = new Vertex(x + size, y - size, size, color);
 
     //lside
-    var vertex18 = new TexVertex(x - size, y - size, -1*size);
-    var vertex19 = new TexVertex(x - size, y - size, size);
-    var vertex20 = new TexVertex(x - size, y + size, -1*size);
-    var vertex21 = new TexVertex(x - size, y + size, size);
-    var vertex22 = new TexVertex(x - size, y + size, -1*size);
-    var vertex23 = new TexVertex(x - size, y - size, size);
+    var vertex18 = new Vertex(x - size, y - size, -1*size, color);
+    var vertex19 = new Vertex(x - size, y - size, size, color);
+    var vertex20 = new Vertex(x - size, y + size, -1*size, color);
+    var vertex21 = new Vertex(x - size, y + size, size, color);
+    var vertex22 = new Vertex(x - size, y + size, -1*size, color);
+    var vertex23 = new Vertex(x - size, y - size, size, color);
 
     //topside
-    var vertex24 = new TexVertex(x - size, y + size, -1*size);
-    var vertex25 = new TexVertex(x + size, y + size, size);
-    var vertex26 = new TexVertex(x + size, y + size, -1*size);
-    var vertex27 = new TexVertex(x - size, y + size, size);
-    var vertex28 = new TexVertex(x + size, y + size, size);
-    var vertex29 = new TexVertex(x - size, y + size, -1*size);
+    var vertex24 = new Vertex(x - size, y + size, -1*size, color);
+    var vertex25 = new Vertex(x + size, y + size, size, color);
+    var vertex26 = new Vertex(x + size, y + size, -1*size, color);
+    var vertex27 = new Vertex(x - size, y + size, size, color);
+    var vertex28 = new Vertex(x + size, y + size, size, color);
+    var vertex29 = new Vertex(x - size, y + size, -1*size, color);
 
     //botside
-    var vertex30 = new TexVertex(x - size, y - size, -1*size);
-    var vertex31 = new TexVertex(x + size, y - size, size);
-    var vertex32 = new TexVertex(x + size, y - size, -1*size);
-    var vertex33 = new TexVertex(x - size, y - size, size);
-    var vertex34 = new TexVertex(x + size, y - size, size);
-    var vertex35 = new TexVertex(x - size, y - size, -1*size);
-    } 
-    
-    else{
-          //front
-    var vertex0 = new Vertex(x - size, y - size, size,color);
-    var vertex1 = new Vertex(x + size, y - size, size,color);
-    var vertex2 = new Vertex(x + size, y + size, size,color);
-    var vertex3 = new Vertex(x - size, y + size, size,color);
-    var vertex4 = new Vertex(x + size, y + size, size,color);
-    var vertex5 = new Vertex(x - size, y - size, size,color);
-
-    //back
-    var vertex6 = new Vertex(x - size, y - size, -1*size,color);
-    var vertex7 = new Vertex(x + size, y - size, -1*size,color);
-    var vertex8 = new Vertex(x + size, y + size, -1*size,color);
-    var vertex9 = new Vertex(x - size, y + size, -1*size,color);
-    var vertex10 = new Vertex(x + size, y + size, -1*size,color);
-    var vertex11 = new Vertex(x - size, y - size, -1*size,color);
-
-    //rside
-    var vertex12 = new Vertex(x + size, y - size, -1*size,color);
-    var vertex13 = new Vertex(x + size, y - size, size,color);
-    var vertex14 = new Vertex(x + size, y + size, -1*size,color);
-    var vertex15 = new Vertex(x + size, y + size, size,color);
-    var vertex16 = new Vertex(x + size, y + size, -1*size,color);
-    var vertex17 = new Vertex(x + size, y - size, size,color);
-
-    //lside
-    var vertex18 = new Vertex(x - size, y - size, -1*size,color);
-    var vertex19 = new Vertex(x - size, y - size, size,color);
-    var vertex20 = new Vertex(x - size, y + size, -1*size,color);
-    var vertex21 = new Vertex(x - size, y + size, size,color);
-    var vertex22 = new Vertex(x - size, y + size, -1*size,color);
-    var vertex23 = new Vertex(x - size, y - size, size,color);
-
-    //topside
-    var vertex24 = new Vertex(x - size, y + size, -1*size,color);
-    var vertex25 = new Vertex(x + size, y + size, size,color);
-    var vertex26 = new Vertex(x + size, y + size, -1*size,color);
-    var vertex27 = new Vertex(x - size, y + size, size,color);
-    var vertex28 = new Vertex(x + size, y + size, size,color);
-    var vertex29 = new Vertex(x - size, y + size, -1*size,color);
-
-    //botside
-    var vertex30 = new Vertex(x - size, y - size, -1*size,color);
-    var vertex31 = new Vertex(x + size, y - size, size,color);
-    var vertex32 = new Vertex(x + size, y - size, -1*size,color);
-    var vertex33 = new Vertex(x - size, y - size, size,color);
-    var vertex34 = new Vertex(x + size, y - size, size,color);
-    var vertex35 = new Vertex(x - size, y - size, -1*size,color);
-
-    }
+    var vertex30 = new Vertex(x - size, y - size, -1*size, color);
+    var vertex31 = new Vertex(x + size, y - size, size, color);
+    var vertex32 = new Vertex(x + size, y - size, -1*size, color);
+    var vertex33 = new Vertex(x - size, y - size, size, color);
+    var vertex34 = new Vertex(x + size, y - size, size, color);
+    var vertex35 = new Vertex(x - size, y - size, -1*size, color);
 
     vertices.push(vertex0);
     vertices.push(vertex1);
