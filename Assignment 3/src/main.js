@@ -34,7 +34,7 @@ function main() {
 
   // Add uniforms
 
-    // Add uniforms
+  // Add uniforms
   //shader.addUniform("u_Sampler", "sampler2D", 0);
   shader2.addUniform("u_ModelMatrix", "mat4", idMatrix.elements);
 
@@ -42,4 +42,18 @@ function main() {
   // Initialize renderer with scene and camera
   renderer = new Renderer(gl, scene, null);
   renderer.start();
+
+
+  var image = new Image();
+  // Tell the browser to load an image
+  image.src = 'objs/sky.jpg';
+
+  // Register the event handler to be called on loading an image
+  image.onload = function () {
+    console.log("hello");
+    var shape = new TexCube(shader, .25, .25, .5, image);
+    scene.addGeometry(shape);
+    if (image == null) image.onload;
+  };
+  
 }

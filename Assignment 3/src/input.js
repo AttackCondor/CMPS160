@@ -80,7 +80,8 @@ class InputHandler {
 
     fileReader.readAsText(objFile);
     fileReader.onloadend = function () {
-      alert(fileReader.result);
+      var customObj = new CustomOBJ(shader, fileReader.result);
+      _inputHandler.scene.addGeometry(customObj);
     }
   }
 
@@ -99,6 +100,7 @@ class InputHandler {
 
     var imgPath = document.getElementById("texInput").value;
     var imgPathSplit = imgPath.split("\\");
+    console.log(imgPath, imgPathSplit);
 
     // Tell the browser to load an image
     image.src = 'objs/' + imgPathSplit[imgPathSplit.length - 1];
