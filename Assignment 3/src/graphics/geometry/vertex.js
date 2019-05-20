@@ -5,15 +5,12 @@
  * @this {Vertex}
  */
 class Vertex {
-  constructor(x, y, z, color) {
-    this.point = new Vector3([x, y, z]);
-    if (color) {
-      color = color.map(x => x / 255);
-      this.color = [color[0], color[1], color[2], 1.0];
-    }
-    else this.color = [Math.random(), Math.random(), Math.random()];
-    this.texCoords = [0, 0];
-    // This class can be extended to support other attributes such as
-    // normals and UV coordinates.
+  constructor(x, y, z) {
+      this.point    = new Vector3([x, y, z]);
+      this.color    = [1.0, 0.0, 0.0, 1.0];
+      this.texCoord = [0.0, 0.0];
+
+      // This class can be extended to support other attributes such as
+      // normals and UV coordinates.
   }
 }

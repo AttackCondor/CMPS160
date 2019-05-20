@@ -61,7 +61,7 @@ class InputHandler {
       var shape = new Cube(shader2, x, y, size, color, this.image);
    }
    else if(document.getElementById("tiltcube").checked){
-    var shape = new Cube(shader, x, y, size, color, this.image);
+    var shape = new TriangleExam(shader, this.image);
  }
     this.scene.addGeometry(shape);
   }
