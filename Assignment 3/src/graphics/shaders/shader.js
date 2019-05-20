@@ -58,4 +58,4 @@ class Shader {
             this.uniforms[uniformName].value = value;
         }
     }
-}
+    }

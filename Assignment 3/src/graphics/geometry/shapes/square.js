@@ -24,6 +24,7 @@ class Square extends Geometry {
     this.rot = 0;
     this.rot = 5;
 
+    this.modelMatrix = new Matrix4();
     this.rotationMatrix = new Matrix4();
     this.translationMatrix = new Matrix4();
     this.scalingMatrix = new Matrix4();

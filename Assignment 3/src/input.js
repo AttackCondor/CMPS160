@@ -58,10 +58,10 @@ class InputHandler {
        var shape = new Circle(shader2, x, y, size, color, segments);
     }
     else if(document.getElementById("tiltcube").checked && !this.image){
-      var shape = new Cube(shader2, x, y, size, color, this.image);
+      var shape = new Cube(shader2, x, y, size, color);
    }
    else if(document.getElementById("tiltcube").checked){
-    var shape = new TriangleExam(shader, this.image);
+    var shape = new TexCube(shader, x, y, size, this.image);
  }
     this.scene.addGeometry(shape);
   }

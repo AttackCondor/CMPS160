@@ -25,6 +25,7 @@ class Triangle extends Geometry {
         this.rot = 0;
         this.scale = 1.05;
 
+        this.modelMatrix = new Matrix4();
         this.rotationMatrix = new Matrix4();
         this.translationMatrix = new Matrix4();
         this.scalingMatrix = new Matrix4();

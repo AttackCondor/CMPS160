@@ -12,18 +12,18 @@ class Cube extends Geometry {
    * @param {Shader} shader Shading object used to shade geometry
    * @returns {cube} cube created
    */
-  constructor(shader, x, y, size, color, image) {
+  constructor(shader, x, y, size, color) {
     super(shader);
     this.x = x - size;
     this.y = y - size;
     this.size = size;
     this.color = color;
-    this.image = image;
 
     this.vertices = this.generateCubeVertices(x, y, size, color);
     this.faces = { 0: this.vertices };
     this.rot = 5;
 
+    this.modelMatrix = new Matrix4();
     this.rotationMatrix = new Matrix4();
     this.translationMatrix = new Matrix4();
     this.scalingMatrix = new Matrix4();
@@ -49,7 +49,7 @@ class Cube extends Geometry {
     //front
     var vertex0 = new Vertex(x - size, y - size, size, color);
     vertex0.texCoord = [0.0, 0.0];
-    var vertex1 = new Vertex(x + size, y - size, size,color);
+    var vertex1 = new Vertex(x + size, y - size, size, color);
     vertex1.texCoord = [1.0, 0.0];
     var vertex2 = new Vertex(x + size, y + size, size, color);
     vertex2.texCoord = [0.0, 1.0];

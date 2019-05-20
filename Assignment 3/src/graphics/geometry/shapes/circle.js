@@ -26,6 +26,7 @@ class Circle extends Geometry {
         this.vertices = this.generateCircleVertices(x, y, size, color, segments);
         this.faces = { 0: [0, 1, 2] };
 
+        this.modelMatrix = new Matrix4();
         this.rotationMatrix = new Matrix4();
         this.translationMatrix = new Matrix4();
         this.scalingMatrix = new Matrix4();
