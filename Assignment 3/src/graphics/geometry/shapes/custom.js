@@ -190,4 +190,11 @@ class CustomOBJ extends Geometry {
     scaleMatrix.setScale(scaleValue, scaleValue, scaleValue);
     this.modelMatrix = scaleMatrix.multiply(this.modelMatrix);
   }
+
+  render(){
+    var rotateMatrix = new Matrix4();
+    rotateMatrix = rotateMatrix.setRotate(1, 0, 1, 0);
+    this.addVertexNormals.modelMatrix = this.modelMatrix.multiply(rotateMatrix);
+    this.shader.setUniform("u_ModelMatrix", this.modelMatrix.elements);
+  }
 }
