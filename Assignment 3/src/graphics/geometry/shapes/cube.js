@@ -12,12 +12,13 @@ class Cube extends Geometry {
    * @param {Shader} shader Shading object used to shade geometry
    * @returns {cube} cube created
    */
-  constructor(shader, x, y, size, color) {
+  constructor(shader, x, y, size, color, image) {
     super(shader);
     this.x = x - size;
     this.y = y - size;
     this.size = size;
     this.color = color;
+    this.image = image;
 
     this.vertices = this.generateCubeVertices(x, y, size, color);
     this.faces = { 0: this.vertices };

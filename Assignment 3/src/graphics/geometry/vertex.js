@@ -12,6 +12,7 @@ class Vertex {
       this.color = [color[0], color[1], color[2], 1.0];
     }
     else this.color = [Math.random(), Math.random(), Math.random()];
+    this.texCoords = [0, 0];
     // This class can be extended to support other attributes such as
     // normals and UV coordinates.
   }

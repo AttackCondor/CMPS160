@@ -4,7 +4,7 @@
  * @author Lucas N. Ferreira
  * @this {Triangle}
  */
-class Triangle extends Geometry {
+class TriangleExam extends Geometry {
   /**
    * Constructor for Triangle.
    *
@@ -31,17 +31,20 @@ class Triangle extends Geometry {
       var vertex0 = new Vertex(-1.0, -1.0, 0.0);
       vertex0.texCoord = [0.0, 0.0];
       vertices.push(vertex0);
+      console.log("tex:", vertex0.texCoord);
+
 
       // Bottom right
       var vertex1 = new Vertex( 1.0, -1.0, 0.0);
       vertex1.texCoord = [1.0, 0.0];
       vertices.push(vertex1);
+      console.log("tex:", vertex1.texCoord);
 
       // Center
       var vertex2 = new Vertex( 0.0, 1.0, 0.0);
       vertex2.texCoord = [0.5, 1.0];
       vertices.push(vertex2);
-
+      console.log("tex:", vertex2.texCoord);
       return vertices;
    }
 }
