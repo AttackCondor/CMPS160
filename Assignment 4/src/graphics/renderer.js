@@ -54,9 +54,8 @@ class Renderer {
             this.gl.useProgram(geometry.shader.program)
             this.gl.program = geometry.shader.program
 
-            // Callback function in the case user wants to change the
-            // geometry before the draw call
-            geometry.render();
+            geometry.shader.setUniform("u_ViewMatrix", this.camera.viewMatrix.elements);
+            geometry.shader.setUniform("u_ProjectionMatrix", this.camera.projectionMatrix.elements);
 
             if(geometry.image != null) {
                 if(!(geometry.image.src in this.textures)) {
@@ -66,11 +65,18 @@ class Renderer {
                 }
             }
 
-            // Draw geometry
-            this.sendVertexDataToGLSL(geometry.data, geometry.dataCounts, geometry.shader);
-            this.sendIndicesToGLSL(geometry.indices);
+            // Callback function in the case user wants to change the
+            // geometry before the draw call
+            geometry.render();
 
-            this.drawBuffer(geometry.indices.length)
+            // Set attribute buffer with the geometry data
+            this.sendVertexDataToGLSL(geometry.data, geometry.dataCounts, geometry.shader);
+
+            // Passes the indices of a geometry to the index buffer a
+            this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, geometry.indices, this.gl.STATIC_DRAW);
+
+            // Draw geometries using current buffer data
+            this.gl.drawElements(this.gl.TRIANGLES, geometry.indices.length, this.gl.UNSIGNED_SHORT, 0);
         }
     }
 
@@ -120,6 +126,7 @@ class Renderer {
           this.gl.enableVertexAttribArray(attribute);
 
           currentDataStart += FSIZE * dataCounts[i];
+
           i += 1;
        }
 
@@ -161,25 +168,6 @@ class Renderer {
               this.gl.uniform1i(uniform.location, uniform.value);
               break;
         }
-    }
-
-    /**
-     * Passes the indices of a geometry to the index buffer
-     *
-     * @private
-     * @param {Uint16Array} indices An array of indices
-     */
-    sendIndicesToGLSL(indices) {
-        this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, indices, this.gl.STATIC_DRAW);
-    }
-
-    /**
-     * Draws the current buffer loaded. The buffer was loaded by sendVerticesToGLSL.
-     *
-     * @param {Integer} pointCount The amount of vertices being drawn from the buffer.
-     */
-    drawBuffer(indicesLength) {
-        this.gl.drawElements(this.gl.TRIANGLES, indicesLength, this.gl.UNSIGNED_SHORT, 0);
     }
 
     loadTexture(texture, image) {
