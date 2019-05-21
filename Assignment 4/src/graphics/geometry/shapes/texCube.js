@@ -30,14 +30,14 @@ class TexCube extends Geometry {
         this.initMatrix = new Matrix4();
 
         this.translateMatrix.setTranslate(x, y, 0);
-        this.rotationMatrix.setRotate(1, 0, 5, 0);
-        this.initMatrix.setRotate(-25, 1, 0, 0);
         this.scaleMatrix.setScale(size, size, size);
 
         this.modelMatrix.multiply(this.initMatrix);
         this.modelMatrix.multiply(this.translateMatrix);
         this.modelMatrix.multiply(this.scaleMatrix);
-        this.shader.setUniform("u_ModelMatrix", this.modelMatrix.elements);
+
+        this.shader.setUniform("u_ViewMatrix", this.modelMatrix.elements);
+
         // CALL THIS AT THE END OF ANY SHAPE CONSTRUCTOR
         this.interleaveVertices();
     }
@@ -164,7 +164,6 @@ class TexCube extends Geometry {
     }
 
     render() {
-        this.modelMatrix.multiply(this.rotationMatrix);
         this.shader.setUniform("u_ModelMatrix", this.modelMatrix.elements);
     }
 

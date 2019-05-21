@@ -25,11 +25,7 @@ class InputHandler {
       document.addEventListener('keydown', function(ev) { _inputHandler.keyDown(ev); }, false);
       document.addEventListener('keyup',   function(ev) { _inputHandler.keyUp(ev);   }, false);
 
-      // Button Events
-      document.getElementById('fileLoad').onclick = function() { _inputHandler.readSelectedFile() };
-
       // HTML Slider Events
-      document.getElementById('exampleSlider').addEventListener('mouseup', function() { console.log(this.value); });
     }
 
     /**
@@ -46,9 +42,11 @@ class InputHandler {
     mouseMove(ev) {
         var movementX = ev.movementX;
         console.log("movementX", movementX);
+        this.camera.pan(movementX);
 
         var movementY = ev.movementY;
         console.log("movementY", movementY);
+        this.camera.tilt(movementY);
     }
 
     keyUp(ev) {
@@ -65,6 +63,15 @@ class InputHandler {
         }
         else if(keyName == "d") {
             this.camera.truck(-1);
+        }
+        else if(keyName == "w") {
+            this.camera.dolly(1);
+        }
+        else if(keyName == "s") {
+            this.camera.dolly(-1);
+        }
+        else if(keyName == "z") {
+            this.camera.swap();
         }
     }
 

@@ -78,6 +78,20 @@ class Renderer {
             // Draw geometries using current buffer data
             this.gl.drawElements(this.gl.TRIANGLES, geometry.indices.length, this.gl.UNSIGNED_SHORT, 0);
         }
+
+        if(geometry.image != null) {
+          if(!(geometry.image.src in this.textures)) {
+            // Create a texture object and store id using its path as key
+            this.textures[geometry.image.src] = this.gl.createTexture();
+            this.loadTexture(this.textures[geometry.image.src], geometry.image);
+          }
+          else {
+            // Enable texture unit0
+            this.gl.activeTexture(this.gl.TEXTURE0);
+            // Bind the texture object to the target
+            this.gl.bindTexture(this.gl.TEXTURE_2D, this.textures[geometry.image.src]);
+          }
+        }
     }
 
     /**
