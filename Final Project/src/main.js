@@ -28,14 +28,23 @@ function main() {
   shader.addUniform("u_Sampler", "sampler2D", new Matrix4().elements);
   shader.addUniform("u_ViewMatrix", "mat4", new Matrix4().elements);
   shader.addUniform("u_ProjectionMatrix", "mat4", new Matrix4().elements);
+  shader.addUniform("u_ModelMatrix", "mat4", new Matrix4().elements);
 
-  // Load texture and add triangle to the scene with that texture.
-  inputHandler.readTexture("objs/cat_.jpg", function(image) {
-      var shape = new Triangle(shader, image);
-      scene.addGeometry(shape);
+  //Load texture and add triangle to the scene with that texture.
+  inputHandler.readTexture("objs/sky.jpg", function (image) {
+    var shape = new Tunnel(shader, 0, 0, 0, 1, image);
+    scene.addGeometry(shape);
   })
+
+    //Load texture and add triangle to the scene with that texture.
+    inputHandler.readTexture("objs/blue.jpg", function (image) {
+      var ship = new Ship(shader, 0, 0, 0, .25, image);
+      scene.addGeometry(ship);
+    })
 
   // Initialize renderer with scene and camera
   renderer = new Renderer(gl, scene, camera);
   renderer.start();
+
+
 }
