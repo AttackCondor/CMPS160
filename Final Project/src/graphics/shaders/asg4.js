@@ -8,12 +8,11 @@ var ASG4_VSHADER =
   varying vec2 v_TexCoord;
   uniform mat4 u_ViewMatrix;
   uniform mat4 u_ProjectionMatrix;
-  uniform mat4 u_ModelMatrix;
 
   void main() {
     v_Color = a_Color;
     v_TexCoord = a_TexCoord;
-    gl_Position = u_ProjectionMatrix * u_ViewMatrix * u_ModelMatrix * a_Position;
+    gl_Position = u_ProjectionMatrix * u_ViewMatrix * a_Position;
   }`;
 
 // Fragment Shader
@@ -27,4 +26,3 @@ var ASG4_FSHADER =
   void main() {
     gl_FragColor = texture2D(u_Sampler, v_TexCoord);
   }`;
-

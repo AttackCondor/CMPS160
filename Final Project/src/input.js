@@ -7,111 +7,101 @@ var _inputHandler = null;
  * @this {Scene}
  */
 class InputHandler {
-  /**
-   * Initializes the event handeling functions within the program.
-   */
-  constructor(canvas, scene) {
-    this.canvas = canvas;
-    this.scene = scene;
+    /**
+     * Initializes the event handeling functions within the program.
+     */
+    constructor(canvas, scene, camera) {
+      this.canvas = canvas;
+      this.scene  = scene;
+      this.camera = camera;
 
-    _inputHandler = this;
+      _inputHandler = this;
 
-    this.image = null;
+      // Mouse Events
+      this.canvas.onmousedown = function(ev) { _inputHandler.mouseClick(ev) };
+      this.canvas.onmousemove = function(ev) { _inputHandler.mouseMove(ev) };
 
-    // Mouse Events
-    this.canvas.onmousedown = function(ev) { this.mouseheld = true; _inputHandler.click(ev);};
-    this.canvas.onmouseup   = function() { this.mouseheld = false;};
-    this.canvas.onmousemove = function(ev) { if(this.mouseheld){_inputHandler.click(ev)} };
+      // Keyboard Events
+      document.addEventListener('keydown', function(ev) { _inputHandler.keyDown(ev); }, false);
+      document.addEventListener('keyup',   function(ev) { _inputHandler.keyUp(ev);   }, false);
 
-    //button events
-    document.getElementById("clear").onclick = function() { _inputHandler.scene.clearGeometries();};
-    document.getElementById('fileLoad').onclick = function() { _inputHandler.readSelectedFile() };
-    document.getElementById('texInput').onchange = function () { _inputHandler.readTexture() };
-    document.getElementById("colorType").onclick = function() {_inputHandler.changeButton()};
-  }
+      // Button Events
+      document.getElementById('fileLoad').onclick = function() { _inputHandler.readSelectedFile() };
 
-  /**
-   * Function called upon mouse click.
-   */
-  click(ev) {
-    // Print x,y coordinates.
-    console.log(ev.clientX, ev.clientY);
-    //Convert coordinates to webgl style
-     var x = (ev.clientX - (canvas.height/2))/(canvas.height/2);
-     var y = ((canvas.height/2) - ev.clientY)/(canvas.height/2);
-
-     var size = (document.getElementById("Size").value)/100;
-     var red = document.getElementById("Red").value;
-     var green = document.getElementById("Green").value;
-     var blue = document.getElementById("Blue").value;
-     var segments = document.getElementById("Segments").value;
-     var color = [red, green, blue];
-     if(document.getElementById("colorType").value == "Rainbow!") color = null;
-
-     if(document.getElementById("spinsquare").checked){
-       var shape = new Square(shader2, x, y, size, color);
-     }
-     else if(document.getElementById("fluctriangle").checked){
-       var shape = new Triangle(shader2, x, y, size, color);
-     }
-     else if(document.getElementById("randcircle").checked){
-       var shape = new Circle(shader2, x, y, size, color, segments);
-    }
-    else if(document.getElementById("tiltcube").checked && !this.image){
-      var shape = new Cube(shader2, x, y, size, color);
-   }
-   else if(document.getElementById("tiltcube").checked){
-    var shape = new TexCube(shader, x, y, size, this.image);
- }
-    this.scene.addGeometry(shape);
-  }
-
-  /**
-   * Function called to read a selected file.
-   */
-  readSelectedFile() {
-    var fileReader = new FileReader();
-    var objFile = document.getElementById("fileInput").files[0];
-
-    if (!objFile) {
-      alert("OBJ file not set!");
-      return;
+      // HTML Slider Events
+      document.getElementById('exampleSlider').addEventListener('mouseup', function() { console.log(this.value); });
     }
 
-    fileReader.readAsText(objFile);
-    fileReader.onloadend = function () {
-      var customObj = new CustomOBJ(shader, fileReader.result);
-      _inputHandler.scene.addGeometry(customObj);
-    }
-  }
+    /**
+     * Function called upon mouse click.
+     */
+    mouseClick(ev) {
+        // Print x,y coordinates.
+        console.log(ev.clientX, ev.clientY);
 
-  readTexture() {
-    // Create the image object
-    var image = new Image();
-    if (!image) {
-      console.log('Failed to create the image object');
-      return false;
+        var shape = new Triangle(shader);
+        this.scene.addGeometry(shape);
     }
 
-    // Register the event handler to be called on loading an image
-    image.onload = function () {
-      _inputHandler.image = image;
-    };
+    mouseMove(ev) {
+        var movementX = ev.movementX;
+        console.log("movementX", movementX);
 
-    var imgPath = document.getElementById("texInput").value;
-    var imgPathSplit = imgPath.split("\\");
-    console.log(imgPath, imgPathSplit);
+        var movementY = ev.movementY;
+        console.log("movementY", movementY);
+    }
 
-    // Tell the browser to load an image
-    image.src = 'objs/' + imgPathSplit[imgPathSplit.length - 1];
-    return true;
-  }
+    keyUp(ev) {
+        var keyName = event.key;
+        console.log("key up", keyName);
+    }
 
-  changeButton(){
-    if(document.getElementById("colorType").value == "Solid Color")
-      document.getElementById("colorType").value = "Rainbow!";
-    else
-      document.getElementById("colorType").value = "Solid Color";
-  }
+    keyDown(ev) {
+        var keyName = event.key;
+        console.log("key down", keyName);
+
+        if(keyName == "a") {
+            this.camera.truck(1);
+        }
+        else if(keyName == "d") {
+            this.camera.truck(-1);
+        }
+    }
+
+    /**
+     * Function called to read a selected file.
+     */
+    readSelectedFile() {
+        var fileReader = new FileReader();
+        var objFile = document.getElementById("fileInput").files[0];
+
+        if (!objFile) {
+            alert("OBJ file not set!");
+            return;
+        }
+
+        fileReader.readAsText(objFile);
+        fileReader.onloadend = function() {
+            alert(fileReader.result);
+        }
+    }
+
+    readTexture(src, onTexLoad) {
+        // Create the image object
+        var image = new Image();
+        if (!image) {
+          console.log('Failed to create the image object');
+          return false;
+        }
+
+        // Register the event handler to be called on loading an image
+        image.onload = function() {
+            _inputHandler.image = image;
+            onTexLoad(image);
+        };
+
+        // Tell the browser to load an image
+        image.src = src
+        return true;
+    }
 }
-

@@ -13,38 +13,29 @@ function main() {
 
   // Initialize the scene
   var scene = new Scene();
-  var inputHandler = new InputHandler(canvas, scene);
+  var camera = new Camera();
 
+  var inputHandler = new InputHandler(canvas, scene, camera);
 
-  var idMatrix = new Matrix4();
   // Initialize shader
-  shader = new Shader(gl, ASG3_VSHADER, ASG3_FSHADER);
-  shader2 = new Shader(gl, ASG1_VSHADER, ASG1_FSHADER);
-
+  shader = new Shader(gl, ASG4_VSHADER, ASG4_FSHADER);
 
   // Add attibutes
   shader.addAttribute("a_Position");
   shader.addAttribute("a_Color");
   shader.addAttribute("a_TexCoord");
-  shader.addUniform("u_ModelMatrix", "mat4", idMatrix.elements);
 
+  shader.addUniform("u_Sampler", "sampler2D", new Matrix4().elements);
+  shader.addUniform("u_ViewMatrix", "mat4", new Matrix4().elements);
+  shader.addUniform("u_ProjectionMatrix", "mat4", new Matrix4().elements);
 
-  shader2.addAttribute("a_Position");
-  shader2.addAttribute("a_Color");
-
-  // Add uniforms
-
-  // Add uniforms
-  //shader.addUniform("u_Sampler", "sampler2D", 0);
-  shader2.addUniform("u_ModelMatrix", "mat4", idMatrix.elements);
-
+  // Load texture and add triangle to the scene with that texture.
+  inputHandler.readTexture("objs/cat_.jpg", function(image) {
+      var shape = new Triangle(shader, image);
+      scene.addGeometry(shape);
+  })
 
   // Initialize renderer with scene and camera
-  renderer = new Renderer(gl, scene, null);
+  renderer = new Renderer(gl, scene, camera);
   renderer.start();
-
-
-  var shape = new Tunnel(shader2, 0, 0, 1, null);
-  scene.addGeometry(shape);
-  
 }
