@@ -30,21 +30,48 @@ function main() {
   shader.addUniform("u_ProjectionMatrix", "mat4", new Matrix4().elements);
   shader.addUniform("u_ModelMatrix", "mat4", new Matrix4().elements);
 
-  var land = new Square(shader, 0, 0, 1, [0,255,0]);
-  scene.addGeometry(land);
-  var sky = new Cube(shader, 0, 0, 1, [0, 0, 100]);
-  scene.addGeometry(sky);
-  
+
+
+  //Generate Map array
+  var mapArray = new Array(32);
+  for (var i = 0; i < mapArray.length; i++) {
+    mapArray[i] = new Array(32);
+    for (var j = 0; j < mapArray.length; j++) {
+      //mapArray[i][j] = Math.floor((Math.random() * 16) - 13);
+      if(i===0 || i===31 || j===0 || j===31){
+        mapArray[i][j] = Math.floor(Math.random()*4)+1;
+      }
+      if (mapArray[i][j] < 0) mapArray[i][j] = 0;
+    }
+  }
+  console.log(mapArray);
+
+
   //Load texture and add triangle to the scene with that texture.
-  inputHandler.readTexture("objs/cat_.jpg", function(image) {
-      var shape = new TexCube(shader, .5, 0, .8, image);
-      scene.addGeometry(shape);
+  inputHandler.readTexture("objs/brick.jpg", function (image) {
+    for (var i = 0; i < mapArray.length; i++) {
+      for (var j = 0; j < mapArray.length; j++) {
+        for (var c = mapArray[i][j]; c > 0; c--) {
+          var cube = new TexCube(shader, (i-16)/2, (c/2)-1.5, (j-16)/2, .5, image);
+          scene.addGeometry(cube);
+        }
+      }
+    }
+
+  })
+
+  //Load texture and add triangle to the scene with that texture.
+  inputHandler.readTexture("objs/blue.jpg", function (image) {
+    var shape = new TexCube(shader, 0, 0, 0, 3, image);
+    scene.addGeometry(shape);
   })
   //Load texture and add triangle to the scene with that texture.
-  inputHandler.readTexture("objs/sky.jpg", function(image) {
-    var shape = new TexCube(shader, 0, 0, 5, image);
+  inputHandler.readTexture("objs/teapot.jpg", function (image) {
+    var shape = new TexCube(shader, 0, -26.25, 0, 5, image);
     scene.addGeometry(shape);
-})
+  })
+
+
 
   // Initialize renderer with scene and camera
   renderer = new Renderer(gl, scene, camera);

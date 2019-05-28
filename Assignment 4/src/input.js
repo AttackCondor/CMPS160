@@ -33,7 +33,7 @@ class InputHandler {
      */
     mouseClick(ev) {
         // Print x,y coordinates.
-        console.log(ev.clientX, ev.clientY);
+        //console.log(ev.clientX, ev.clientY);
 
         var shape = new Triangle(shader);
         this.scene.addGeometry(shape);
@@ -51,12 +51,12 @@ class InputHandler {
 
     keyUp(ev) {
         var keyName = event.key;
-        console.log("key up", keyName);
+        //console.log("key up", keyName);
     }
 
     keyDown(ev) {
         var keyName = event.key;
-        console.log("key down", keyName);
+        //console.log("key down", keyName);
 
         if(keyName == "a") {
             this.camera.truck(1);
@@ -73,6 +73,7 @@ class InputHandler {
         else if(keyName == "z") {
             this.camera.swap();
         }
+        
     }
 
     /**
