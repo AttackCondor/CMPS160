@@ -13,38 +13,37 @@ function main() {
 
   // Initialize the scene
   var scene = new Scene();
-  var camera = new Camera();
+  var inputHandler = new InputHandler(canvas, scene);
 
-  var inputHandler = new InputHandler(canvas, scene, camera);
 
+  var idMatrix = new Matrix4();
   // Initialize shader
-  shader = new Shader(gl, ASG4_VSHADER, ASG4_FSHADER);
+  shader = new Shader(gl, ASG3_VSHADER, ASG3_FSHADER);
+  shader2 = new Shader(gl, ASG1_VSHADER, ASG1_FSHADER);
+
 
   // Add attibutes
   shader.addAttribute("a_Position");
   shader.addAttribute("a_Color");
   shader.addAttribute("a_TexCoord");
+  shader.addUniform("u_ModelMatrix", "mat4", idMatrix.elements);
 
-  shader.addUniform("u_Sampler", "sampler2D", new Matrix4().elements);
-  shader.addUniform("u_ViewMatrix", "mat4", new Matrix4().elements);
-  shader.addUniform("u_ProjectionMatrix", "mat4", new Matrix4().elements);
-  shader.addUniform("u_ModelMatrix", "mat4", new Matrix4().elements);
+  shader2.addAttribute("a_Position");
+  shader2.addAttribute("a_Color");
 
-  //Load texture and add triangle to the scene with that texture.
-  inputHandler.readTexture("objs/sky.jpg", function (image) {
-    var shape = new Tunnel(shader, 0, 0, 0, 1, image);
-    scene.addGeometry(shape);
-  })
+  // Add uniforms
+  shader2.addUniform("u_ModelMatrix", "mat4", idMatrix.elements);
 
-    //Load texture and add triangle to the scene with that texture.
-    inputHandler.readTexture("objs/blue.jpg", function (image) {
-      var ship = new Ship(shader, 0, 0, 0, .25, image);
-      scene.addGeometry(ship);
-    })
+
+  var ship = new Ship(shader2);
+  scene.addGeometry(ship);
+
 
   // Initialize renderer with scene and camera
-  renderer = new Renderer(gl, scene, camera);
+  renderer = new Renderer(gl, scene, null);
   renderer.start();
+
+
 
 
 }

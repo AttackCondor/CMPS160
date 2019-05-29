@@ -21,15 +21,21 @@ class Square extends Geometry {
 
     this.vertices = this.generateSquareVertices(x, y, size, color);
     this.faces = { 0: this.vertices };
-
+    this.rot = 0;
+    this.rot = 5;
 
     this.modelMatrix = new Matrix4();
-    this.rotateMatrix = new Matrix4();
+    this.rotationMatrix = new Matrix4();
+    this.translationMatrix = new Matrix4();
+    this.scalingMatrix = new Matrix4();
+    this.originMatrix = new Matrix4();
+    this.positionMatrix = new Matrix4();
 
-    this.rotateMatrix = this.rotateMatrix.setRotate(90, 1, 0, 0);
-    this.modelMatrix = this.modelMatrix.multiply(this.rotateMatrix);
+    this.originMatrix.setTranslate(-1 * x, -1 * y, 0);
+    this.positionMatrix.setTranslate(x, y, 0);
+    this.scalingMatrix.setRotate(this.rot, 0, 0, 1);
 
-    this.shader.setUniform("u_ModelMatrix", this.modelMatrix.elements);
+    this.time = 0;
     // CALL THIS AT THE END OF ANY SHAPE CONSTRUCTOR
     this.interleaveVertices();
   }
@@ -57,6 +63,13 @@ class Square extends Geometry {
   }
 
   render() {
+
+    this.modelMatrix = this.modelMatrix.multiply(this.positionMatrix);
+    this.modelMatrix = this.modelMatrix.multiply(this.rotationMatrix);
+    this.modelMatrix = this.modelMatrix.multiply(this.translationMatrix);
+    this.modelMatrix = this.modelMatrix.multiply(this.scalingMatrix);
+    this.modelMatrix = this.modelMatrix.multiply(this.originMatrix);
+
     this.shader.setUniform("u_ModelMatrix", this.modelMatrix.elements);
   }
 }

@@ -10,12 +10,20 @@ class CustomOBJ extends Geometry {
    * Constructor for LoadedOBJ
    *
    * @constructor
-   * @param {Shader} shader An shader object
    * @param {String} objStr An OBJ file in string form
+   * @param imgPath An optional file path/data url for an image file
+   * @param color An optional color object with r,g,b,a components
    * @returns {LoadedOBJ} Constructed LoadedOBJ
    */
-  constructor(shader, objStr) {
+  constructor(shader, objStr, imgPath) {
     super(shader);
+
+    // If an image path/data url is provided, then load/save that image as a texture
+    if (imgPath != null) {
+      var self = this;
+      var callback = function(texture) { self.textures.push(texture); };
+      load2DTexture(imgPath, gl.LINEAR, gl.LINEAR, gl.CLAMP_TO_EDGE, gl.CLAMP_TO_EDGE, callback);
+    }
 
     // Construct the Mesh object containg the OBJ file's information
     var objMesh = new OBJ.Mesh(objStr);
@@ -25,10 +33,16 @@ class CustomOBJ extends Geometry {
       this.vertices[i] = new Vertex();
     }
 
+    this.modelMatrix = new Matrix4();
+
     // Add the vertex points, normals, and uv coordinates in OBJ
-    this.addVertexPoints(objMesh.indices, objMesh.vertices);
-    this.addVertexTextureCoordinates(objMesh.indices, objMesh.textures);
+    var transAndScaleVal = this.addVertexPoints(objMesh.indices, objMesh.vertices);
     this.addVertexNormals(objMesh.indices, objMesh.vertexNormals);
+    this.addVertexTextureCoordinates(objMesh.indices, objMesh.textures);
+
+    // Modify loadedOBJ's modelMatrix to present OBJ correctly
+    this.moveOBJToCenterOfScreen(transAndScaleVal[0]);
+    this.scaleOBJToFitOnScreen(transAndScaleVal[1]);
 
     // CALL THIS AT THE END OF ANY SHAPE CONSTRUCTOR
     this.interleaveVertices();
@@ -116,10 +130,10 @@ class CustomOBJ extends Geometry {
    * @param {Array} textures The textures being added
    */
   addVertexTextureCoordinates(indices, textures) {
-    // If textures information is invalid, set vertex.uv to null for all vertices.
+    // If textures information is invalid, set vertex.texCoord to null for all vertices.
     if (this.isInvalidParameter(textures)) {
       for (var i = 0; i < indices.length; i++) {
-        this.vertices[i].texCoords = null;
+        this.vertices[i].texCoord = null;
       }
     }
     else {
@@ -127,7 +141,7 @@ class CustomOBJ extends Geometry {
         var index = indices[i];
         var uv = [textures[index * 2], textures[index * 2 + 1]];
 
-        this.vertices[i].texCoords = uv;
+        this.vertices[i].texCoord = uv;
       }
     }
   }
@@ -149,5 +163,38 @@ class CustomOBJ extends Geometry {
     }
 
     return false;
+  }
+
+  /**
+   * Modifes the LoadedOBJ's modelMatrix to move the LoadedOBJ to the
+   * center of the canvas.
+   *
+   * @private
+   * @param {Array} transValue An array containing translation value for x, y, z
+   * axis (indices: 0, 1, 2)
+   */
+  moveOBJToCenterOfScreen(transValue) {
+    this.modelMatrix.setTranslate(transValue[0], transValue[1], transValue[2]);
+  }
+
+  /**
+   * Modifies the LoadedOBJ's modelMatrix to scale the LoadedOBJ to fit
+   * within the canvas. Assumes moveOBJToCenterOfScreen() has been called
+   * beforehand and modelMatrix is defined.
+   *
+   * @private
+   * @param {Number} scaleValue Amount LoadedOBJ will be scaled by
+   */
+  scaleOBJToFitOnScreen(scaleValue) {
+    var scaleMatrix = new Matrix4();
+    scaleMatrix.setScale(scaleValue, scaleValue, scaleValue);
+    this.modelMatrix = scaleMatrix.multiply(this.modelMatrix);
+  }
+
+  render(){
+    var rotateMatrix = new Matrix4();
+    rotateMatrix = rotateMatrix.setRotate(1, 0, 1, 0);
+    this.addVertexNormals.modelMatrix = this.modelMatrix.multiply(rotateMatrix);
+    this.shader.setUniform("u_ModelMatrix", this.modelMatrix.elements);
   }
 }

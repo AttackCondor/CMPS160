@@ -19,8 +19,7 @@
   <!-- Include shaders -->
   <script src="src/graphics/shaders/shader.js"></script>
   <script src="src/graphics/shaders/asg1.js"></script>
-  <script src="src/graphics/shaders/asg3.js"></script>
-  <script src="src/graphics/shaders/asg4.js"></script>
+  <script src = "src/graphics/shaders/asg3.js"></script>
 
 
 
@@ -28,29 +27,31 @@
   <script src="src/graphics/geometry/vertex.js"></script>
   <script src="src/graphics/geometry/geometry.js"></script>
   <script src="src/graphics/geometry/shapes/triangle.js"></script>
-  <script src="src/graphics/geometry/shapes/ship.js"></script>
   <script src="src/graphics/geometry/shapes/texCube.js"></script>
   <script src="src/graphics/geometry/shapes/square.js"></script>
   <script src="src/graphics/geometry/shapes/circle.js"></script>
   <script src="src/graphics/geometry/shapes/cube.js"></script>
-  <script src="src/graphics/geometry/shapes/tunnel.js"></script>
+  <script src="src/graphics/geometry/shapes/ship.js"></script>
   <script src="src/graphics/renderer.js"></script>
-  <script src="src/graphics/camera.js"></script>
   <script src="src/graphics/scene.js"></script>
   <script src="src/main.js"></script>
   <script src="src/input.js"></script>
 </head>
 
 <body onload="main()" style="margin-top: 0px">
+  <div class="row">
 
-
-  <div>
-    <canvas id="webgl" width="600" height="600">
-      Please use a browser that supports "canvas"
-    </canvas>
-  </div>
-
-
+    <div class="column">
+      <div>
+        <div>
+          <canvas id="webgl" width="600" height="600">
+            Please use a browser that supports "canvas"
+          </canvas>
+        </div>
+        <div> <button class="button button1" onclick="clear()" type="button" id="clear" style="padding-top: 5px"> Restart </button> </div>
+      </div>
+    </div>
+    </div>
 </body>
 
 </html>

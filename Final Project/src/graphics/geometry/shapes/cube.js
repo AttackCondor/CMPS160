@@ -142,6 +142,16 @@ class Cube extends Geometry {
 
   render() {
 
+    if(this.time == 0){
+    this.modelMatrix.multiply(this.renitMatrix);
+    this.time ++;
+    }
+    else{
+    this.modelMatrix = this.modelMatrix.multiply(this.positionMatrix);
+    this.modelMatrix = this.modelMatrix.multiply(this.rotationMatrix);
+    this.modelMatrix = this.modelMatrix.multiply(this.originMatrix);
+    }
+
     this.shader.setUniform("u_ModelMatrix", this.modelMatrix.elements);
   }
 }

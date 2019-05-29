@@ -7,109 +7,63 @@ var _inputHandler = null;
  * @this {Scene}
  */
 class InputHandler {
-    /**
-     * Initializes the event handeling functions within the program.
-     */
-    constructor(canvas, scene, camera) {
-      this.canvas = canvas;
-      this.scene  = scene;
-      this.camera = camera;
+  /**
+   * Initializes the event handeling functions within the program.
+   */
+  constructor(canvas, scene) {
+    this.canvas = canvas;
+    this.scene = scene;
 
-      _inputHandler = this;
+    _inputHandler = this;
 
-      // Mouse Events
-      this.canvas.onmousedown = function(ev) { _inputHandler.mouseClick(ev) };
-      this.canvas.onmousemove = function(ev) { _inputHandler.mouseMove(ev) };
+    this.image = null;
 
-      // Keyboard Events
-      document.addEventListener('keydown', function(ev) { _inputHandler.keyDown(ev); }, false);
-      document.addEventListener('keyup',   function(ev) { _inputHandler.keyUp(ev);   }, false);
+    // Mouse Events
+    this.canvas.onmousedown = function(ev) { this.mouseheld = true; _inputHandler.click(ev);};
+    this.canvas.onmouseup   = function() { this.mouseheld = false;};
+    this.canvas.onmousemove = function(ev) { if(this.mouseheld){_inputHandler.click(ev)} };
 
-      // HTML Slider Events
+    //button events
+    document.getElementById("clear").onclick = function() { _inputHandler.scene.clearGeometries();};
+
+  }
+
+  /**
+   * Function called upon mouse click.
+   */
+  click(ev) {
+    // Print x,y coordinates.
+    console.log(ev.clientX, ev.clientY);
+    //Convert coordinates to webgl style
+     var x = (ev.clientX - (canvas.height/2))/(canvas.height/2);
+     var y = ((canvas.height/2) - ev.clientY)/(canvas.height/2);
+
+     var size = (document.getElementById("Size").value)/100;
+     var red = document.getElementById("Red").value;
+     var green = document.getElementById("Green").value;
+     var blue = document.getElementById("Blue").value;
+     var segments = document.getElementById("Segments").value;
+     var color = [red, green, blue];
+     if(document.getElementById("colorType").value == "Rainbow!") color = null;
+
+     if(document.getElementById("spinsquare").checked){
+       var shape = new Square(shader2, x, y, size, color);
+     }
+     else if(document.getElementById("fluctriangle").checked){
+       var shape = new Triangle(shader2, x, y, size, color);
+     }
+     else if(document.getElementById("randcircle").checked){
+       var shape = new Circle(shader2, x, y, size, color, segments);
     }
+    else if(document.getElementById("tiltcube").checked && !this.image){
+      var shape = new Cube(shader2, x, y, size, color);
+   }
+   else if(document.getElementById("tiltcube").checked){
+    var shape = new TexCube(shader, x, y, size, this.image);
+ }
+    this.scene.addGeometry(shape);
+  }
 
-    /**
-     * Function called upon mouse click.
-     */
-    mouseClick(ev) {
-        // Print x,y coordinates.
-        //console.log(ev.clientX, ev.clientY);
 
-        var shape = new Triangle(shader);
-        this.scene.addGeometry(shape);
-    }
-
-    mouseMove(ev) {
-        var movementX = ev.movementX;
-        console.log("movementX", movementX);
-        this.camera.pan(movementX);
-
-        var movementY = ev.movementY;
-        console.log("movementY", movementY);
-        this.camera.tilt(movementY);
-    }
-
-    keyUp(ev) {
-        var keyName = event.key;
-        //console.log("key up", keyName);
-    }
-
-    keyDown(ev) {
-        var keyName = event.key;
-        //console.log("key down", keyName);
-
-        if(keyName == "a") {
-            this.camera.truck(1);
-        }
-        else if(keyName == "d") {
-            this.camera.truck(-1);
-        }
-        else if(keyName == "w") {
-            this.camera.dolly(1);
-        }
-        else if(keyName == "s") {
-            this.camera.dolly(-1);
-        }
-        else if(keyName == "z") {
-            this.camera.swap();
-        }
-        
-    }
-
-    /**
-     * Function called to read a selected file.
-     */
-    readSelectedFile() {
-        var fileReader = new FileReader();
-        var objFile = document.getElementById("fileInput").files[0];
-
-        if (!objFile) {
-            alert("OBJ file not set!");
-            return;
-        }
-
-        fileReader.readAsText(objFile);
-        fileReader.onloadend = function() {
-            alert(fileReader.result);
-        }
-    }
-
-    readTexture(src, onTexLoad) {
-        // Create the image object
-        var image = new Image();
-        if (!image) {
-          console.log('Failed to create the image object');
-          return false;
-        }
-
-        // Register the event handler to be called on loading an image
-        image.onload = function() {
-            _inputHandler.image = image;
-            onTexLoad(image);
-        };
-
-        // Tell the browser to load an image
-        image.src = src
-        return true;
-    }
 }
+

@@ -12,7 +12,7 @@ class TexCube extends Geometry {
      * @param {Shader} shader Shading object used to shade geometry
      * @returns {Triangle} Triangle created
      */
-    constructor(shader, x, y, z, size, image) {
+    constructor(shader, x, y, size, image) {
         super(shader);
 
         this.x = x;
@@ -29,15 +29,15 @@ class TexCube extends Geometry {
         this.translateMatrix = new Matrix4();
         this.initMatrix = new Matrix4();
 
-        this.translateMatrix.setTranslate(x, y, z);
+        this.translateMatrix.setTranslate(x, y, 0);
+        this.rotationMatrix.setRotate(1, 0, 5, 0);
+        this.initMatrix.setRotate(-25, 1, 0, 0);
         this.scaleMatrix.setScale(size, size, size);
 
         this.modelMatrix.multiply(this.initMatrix);
         this.modelMatrix.multiply(this.translateMatrix);
         this.modelMatrix.multiply(this.scaleMatrix);
-
-        this.shader.setUniform("u_ViewMatrix", this.modelMatrix.elements);
-
+        this.shader.setUniform("u_ModelMatrix", this.modelMatrix.elements);
         // CALL THIS AT THE END OF ANY SHAPE CONSTRUCTOR
         this.interleaveVertices();
     }
@@ -164,6 +164,7 @@ class TexCube extends Geometry {
     }
 
     render() {
+        this.modelMatrix.multiply(this.rotationMatrix);
         this.shader.setUniform("u_ModelMatrix", this.modelMatrix.elements);
     }
 
