@@ -13,14 +13,14 @@ class Ship extends Geometry {
    */
   constructor(shader) {
     super(shader);
-    this.xCor = 0;
-    this.yCor = 0;
     this.xMom = 0;
     this.yMom = 0;
+    this.boost = 0;
     this.color = [0, 255, 0];
     this.lrot = 0;
     this.rrot = 0;
     this.dirVec = new Vector3([0,1,0]);
+    this.posVec = new Vector3([0,0,0]);
     this.rotMatrix = new Matrix4();
     this.transMatrix = new Matrix4();
     this.modelMatrix = new Matrix4();
@@ -36,21 +36,21 @@ class Ship extends Geometry {
   generateShipVertices() {
     var vertices = []
 
-    console.log(this.xCor);
+    console.log(this.posVec.elements[0]);
     //Left side
-    var vertex0 = new Vertex(this.xCor, this.yCor, 0, [0,0,0]); //center
-    var vertex1 = new Vertex(this.xCor-.04, this.yCor-.04, 0, this.color); //left bottom
-    var vertex2 = new Vertex(this.xCor, this.yCor+.08, 0, this.color);  //front
+    var vertex0 = new Vertex(this.posVec.elements[0], this.posVec.elements[1], 0, [0,0,0]); //center
+    var vertex1 = new Vertex(this.posVec.elements[0]-.04, this.posVec.elements[1]-.04, 0, this.color); //left bottom
+    var vertex2 = new Vertex(this.posVec.elements[0], this.posVec.elements[1]+.08, 0, this.color);  //front
 
     //Right side
-    var vertex3 = new Vertex(this.xCor, this.yCor, 0, [0,0,0]); //center
-    var vertex4 = new Vertex(this.xCor+.04, this.yCor-.04, 0, this.color); //right bottom
-    var vertex5 = new Vertex(this.xCor, this.yCor+.08, 0, this.color); //front
+    var vertex3 = new Vertex(this.posVec.elements[0], this.posVec.elements[1], 0, [0,0,0]); //center
+    var vertex4 = new Vertex(this.posVec.elements[0]+.04, this.posVec.elements[1]-.04, 0, this.color); //right bottom
+    var vertex5 = new Vertex(this.posVec.elements[0], this.posVec.elements[1]+.08, 0, this.color); //front
 
     //Bot side
-    var vertex6 = new Vertex(this.xCor, this.yCor, 0, [0,0,0]); //center
-    var vertex7 = new Vertex(this.xCor-.04, this.yCor-.04, 0, this.color); //left bottom
-    var vertex8 = new Vertex(this.xCor+.04, this.yCor-.04, 0, this.color); //right bottom
+    var vertex6 = new Vertex(this.posVec.elements[0], this.posVec.elements[1], 0, [0,0,0]); //center
+    var vertex7 = new Vertex(this.posVec.elements[0]-.04, this.posVec.elements[1]-.04, 0, this.color); //left bottom
+    var vertex8 = new Vertex(this.posVec.elements[0]+.04, this.posVec.elements[1]-.04, 0, this.color); //right bottom
 
 
     vertices.push(vertex0);
@@ -72,9 +72,41 @@ class Ship extends Geometry {
 
     //Set the direction vector equal to the forward direction of the ship after rotating
     this.dirVec = this.rotMatrix.multiplyVector3(new Vector3([0,1,0]));
+    this.dirVec.normalize();
+
+    if(this.boost == 1){
+      this.xMom += this.dirVec.elements[0] * .001;
+      this.yMom += this.dirVec.elements[1] * .001;
+      if(this.xMom <-.03) this.xMom = -.025;
+      if(this.xMom >.03) this.xMom = .025;
+      if(this.yMom <-.03) this.yMom = -.025;
+      if(this.yMom >.03) this.yMom = .025;
+    }
+    else{
+      if(this.xMom > 0) this.xMom -= .0003;
+      else if(this.xMom < 0) this.xMom += .0003;
+      if(this.yMom > 0) this.yMom -= .0003;
+      else if(this.yMom < 0) this.yMom += .0003;
+    }
 
     //Set the translation matrix equal to the x momentum and y momentum
     this.transMatrix.multiply(new Matrix4().setTranslate(this.xMom, this.yMom, 0));
+    this.posVec = this.transMatrix.multiplyVector3(new Vector3([0,0,0]));
+
+    //Bound checking
+    if(this.posVec.elements[0] > 1){
+      this.transMatrix.multiply(new Matrix4().setTranslate(-2, 0, 0));
+    }
+    if(this.posVec.elements[0] < -1){
+      this.transMatrix.multiply(new Matrix4().setTranslate(2, 0, 0));
+    }
+    if(this.posVec.elements[1] > 1){
+      this.transMatrix.multiply(new Matrix4().setTranslate(0, -2, 0));
+    }
+    if(this.posVec.elements[1] < -1){
+      this.transMatrix.multiply(new Matrix4().setTranslate(0, 2, 0));
+    }
+
 
     //Factor these matrices into the model matrix
     this.modelMatrix.multiply(this.transMatrix);

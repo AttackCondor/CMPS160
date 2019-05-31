@@ -37,6 +37,10 @@ function main() {
 
   var ship = new Ship(shader2);
   scene.addGeometry(ship);
+  for (var i = 0; i <= 5; i++) {
+    var ast = new Asteroid(shader2, ((Math.random()*2)+1)/10);
+    scene.addGeometry(ast);
+  }
 
 
   // Initialize renderer with scene and camera

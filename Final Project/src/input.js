@@ -43,18 +43,19 @@ class InputHandler {
   keyUp(ev) {
     var keyName = event.key;
     //console.log("key up", keyName);
-    if (keyName == "a") {
+    if (keyName == "a" || keyName == "A") {
       //left
       _inputHandler.scene.geometries[0].lrot = 0;
       console.log(_inputHandler.scene.geometries[0].dirVec.elements);
     }
-    else if (keyName == "d") {
+    else if (keyName == "d" || keyName == "D") {
       //right
       _inputHandler.scene.geometries[0].rrot = 0;
       console.log(_inputHandler.scene.geometries[0].dirVec.elements);
     }
-    else if (keyName == "w") {
+    else if (keyName == "w" || keyName == "W") {
       //up
+      _inputHandler.scene.geometries[0].boost = 0;
     }
     else if (keyName == "s") {
       //down
@@ -64,21 +65,18 @@ class InputHandler {
   keyDown(ev) {
     var keyName = event.key;
     // console.log("key down", keyName);
-    if (keyName == "a") {
+    if (keyName == "a" || keyName == "A") {
       //left
-      _inputHandler.scene.geometries[0].lrot = 3;
+      _inputHandler.scene.geometries[0].lrot = 5;
     }
-    else if (keyName == "d") {
+    else if (keyName == "d" || keyName == "D") {
       //right
-      _inputHandler.scene.geometries[0].rrot = -3;
+      _inputHandler.scene.geometries[0].rrot = -5;
       //console.log(_inputHandler.scene.geometries[0].dirVec.elements);
     }
-    else if (keyName == "w") {
+    else if (keyName == "w" || keyName == "W") {
       //up
-      console.log(_inputHandler.scene.geometries[0].dirVec.elements);
-      _inputHandler.scene.geometries[0].xMom += _inputHandler.scene.geometries[0].dirVec.elements[0] * .01;
-      _inputHandler.scene.geometries[0].yMom += _inputHandler.scene.geometries[0].dirVec.elements[1] * .01;
-      console.log(_inputHandler.scene.geometries[0].xMom, _inputHandler.scene.geometries[0].yMom);
+      _inputHandler.scene.geometries[0].boost = 1;
     }
     else if (keyName == "s") {
       //down
