@@ -18,6 +18,8 @@ class Renderer {
     this.gl = gl;
     this.scene = scene;
     this.camera = camera;
+    this.time = 0;
+    this.asteroidCount = 0;
 
     this.textures = {};
 
@@ -44,9 +46,12 @@ class Renderer {
    * Renders all the geometry within the scene.
    */
   render() {
+    this.time++;
+    this.asteroidCount = 0;
     // Clear the geometry onscreen
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
+    //loop for collision detection
     for (var i = 0; i < this.scene.geometries.length; i++) {
       var geometry = this.scene.geometries[i];
       switch (geometry.id) {
@@ -63,7 +68,7 @@ class Renderer {
               var yDiff = aY - bY;
               var Dist = Math.sqrt((xDiff * xDiff) + (yDiff * yDiff));
 
-              if (Dist < nextGeo.size && geometry.time > 5) {
+              if (Dist < nextGeo.size && geometry.time > 5 && nextGeo.time > 5) {
                 var explo = new Explosion(shader2, aX, aY);
                 this.scene.geometries.splice(i, 1, explo);
               }
@@ -90,7 +95,7 @@ class Renderer {
               var yDiff = aY - bY;
               var Dist = Math.sqrt((xDiff * xDiff) + (yDiff * yDiff));
 
-              if (Dist < nextGeo.size) {
+              if (Dist < nextGeo.size && nextGeo.time > 5) {
                 console.log("zap", Dist, nextGeo.size, geometry.time);
                 this.scene.geometries.splice(i, 1);
                 if (nextGeo.size > .1) {
@@ -107,6 +112,7 @@ class Renderer {
       }
     }
 
+    //loop for rendering geometries
     for (var i = 0; i < this.scene.geometries.length; i++) {
       var geometry = this.scene.geometries[i];
 
@@ -126,12 +132,24 @@ class Renderer {
         }
       }
 
+      //count how many asteroids are in play
+      if (geometry.id == "ast") this.asteroidCount++;
+
       // Draw geometry
       this.sendVertexDataToGLSL(geometry.data, geometry.dataCounts, geometry.shader);
       this.sendIndicesToGLSL(geometry.indices);
 
       this.drawBuffer(geometry.indices.length)
     }
+
+    //Method to repopulate asteroids
+    //if there are fewer than 6 asteroid in play, add a new one
+    if (this.asteroidCount < 6) {
+      console.log("adding asteroid");
+      var ast = new Asteroid(shader2, ((Math.random() * 2) + 1) / 10, 1.15, 1.15);
+      this.scene.addGeometry(ast);
+    }
+
   }
 
   /**

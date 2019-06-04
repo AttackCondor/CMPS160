@@ -15,6 +15,7 @@ class InputHandler {
     this.scene = scene;
     this.hud = canvas;
     this.hudscene = scene;
+    this.shootReady = true;
 
     this.gl = getWebGLContext(canvas);
     _inputHandler = this;
@@ -45,17 +46,10 @@ class InputHandler {
     var pixels = new Uint8Array(4);
     this.gl.readPixels(0, 0, 1, 1, this.gl.RGBA, this.gl.UNSIGNED_BYTE, pixels);
     console.log(pixels);
-
   }
 
   clear() {
-    _inputHandler.scene.clearGeometries();
-    var ship = new Ship(shader2);
-    _inputHandler.scene.addGeometry(ship);
-    for (var i = 0; i <= 5; i++) {
-      var ast = new Asteroid(shader2, ((Math.random() * 2) + 1) / 10);
-      _inputHandler.scene.addGeometry(ast);
-    }
+    location.reload();
   }
 
   keyUp(ev) {
@@ -74,6 +68,9 @@ class InputHandler {
     }
     else if (keyName == "s" && _inputHandler.scene.geometries[0].id == "ship") {
       //down
+    }
+    else if (keyName == " " && _inputHandler.scene.geometries[0].id == "ship") {
+      this.shootReady = true;
     }
 
   }
@@ -95,7 +92,7 @@ class InputHandler {
     else if (keyName == "s" && _inputHandler.scene.geometries[0].id == "ship") {
       //down
     }
-    else if (keyName == " " && _inputHandler.scene.geometries[0].id == "ship") {
+    else if (keyName == " " && _inputHandler.scene.geometries[0].id == "ship" && this.shootReady) {
       //space
       var pos = _inputHandler.scene.geometries[0].posVec;
       var dir = _inputHandler.scene.geometries[0].dirVec;
@@ -106,6 +103,7 @@ class InputHandler {
         objs += _inputHandler.scene.geometries[i].id + "  ";
       }
       console.log(objs);
+      this.shootReady = false;
     }
 
   }

@@ -11,15 +11,15 @@ function main() {
     console.log("Failed to get WebGL rendering context.");
     return;
   }
-  // var hud = getWebGLContext(canvas);
-  // if (!hud) {
+  // var ctx = getWebGLContext(hud);
+  // if (!ctx) {
   //   console.log("Failed to get WebGL rendering context. (hud)");
-  //   return;
+  //   //return;
   // }
 
   // Initialize the scene
   var scene = new Scene();
-  var hudscene = new Scene();
+  //var hudscene = new Scene();
   var inputHandler = new InputHandler(canvas, scene);
 
 
@@ -37,9 +37,8 @@ function main() {
 
   shader2.addAttribute("a_Position");
   shader2.addAttribute("a_Color");
-
-  // Add uniforms
   shader2.addUniform("u_ModelMatrix", "mat4", idMatrix.elements);
+  
 
 
 
@@ -49,25 +48,37 @@ function main() {
     var ast = new Asteroid(shader2, ((Math.random()*2)+1)/10, 1.15, 1.15);
     scene.addGeometry(ast);
   }
+  // var square1 = new Square(shader2, -.5, .6, .15, [0,255,0]);
+  // scene.addGeometry(square1);
+  // var square2 = new Square(shader2, 0, .6, .15, [255,0,0]);
+  // scene.addGeometry(square2);
+  // var square3 = new Square(shader2, .5, .6, .15, [0,0,255]);
+  // scene.addGeometry(square3);
 
-  var ship = new Explosion(shader2, .2, .2);
-  hudscene.addGeometry(ship);
-
+  
   // Initialize renderer with scene and camera
   renderer = new Renderer(gl, scene, null);
   renderer.start();
-  // hudrenderer = new Renderer(hud, hudscene, null);
-  // hudrenderer.start();
 
-  canvas.onmousedown = function(ev){
-    renderer.render();
-    var pixels = new Uint8Array(4);
-    gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
-    
-    console.log(pixels);
-  }
-
-
-
+  // gl.onmousedown = function(ev){
+  //   var x = ev.clientX, y = ev.clientY;
+  //   var rect = ev.target.getBoundingClientRect();
+  //   var x_in_canvas = x - rect.left, y_in_canvas = rect.bottom - y;
+  //   var pixels = new Uint8Array(4);
+  //   console.log(x, y);
+  //   renderer.render();
+  //   gl.readPixels(x_in_canvas, y_in_canvas, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+  //   console.log(pixels);
+  //   if(pixels[1]==255){
+  //     alert("you clicked the green box")
+  //   }
+  //   else if(pixels[0]==255){
+  //     alert("you clicked the red box")
+  //   }
+  //   else if(pixels[2]==255){
+  //     alert("you clicked the blue box")
+  //   }
+  // }
 
 }
+

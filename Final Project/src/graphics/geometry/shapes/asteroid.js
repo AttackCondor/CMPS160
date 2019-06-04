@@ -43,10 +43,12 @@ class Asteroid extends Geometry {
         var vertices = []
         var i = 0;
         for (i = 0; i < 360; i += (360 / segments)) {
+            var insideCol = Math.random()*255;
             var seglen = 360 / segments;
             var angle1 = Math.PI * 2 * i / 360
             var angle2 = Math.PI * 2 * (i + seglen) / 360
             var vertex1 = new Vertex(x, y, 0.0, [0, 0, 0]);
+            //var vertex1 = new Vertex(x, y, 0.0, [insideCol, insideCol, insideCol]); //for a different style
             var vertex2 = new Vertex(x + (Math.sin(angle1) * size), y + (Math.cos(angle1) * size), 0.0, [192, 192, 192]);
             var vertex3 = new Vertex(x + (Math.sin(angle2) * size), y + (Math.cos(angle2) * size), 0.0, [192, 192, 192]);
             vertices.push(vertex1);

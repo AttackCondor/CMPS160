@@ -16,7 +16,7 @@ class Bullet extends Geometry {
     this.id = "bullet";
     this.xMom = pos.elements[0];
     this.yMom = pos.elements[1];
-    this.color = [0, 255, 0];
+    this.color = [255, 0, 0];
     this.dirVec = dir;
     this.posVec = pos;
     this.transMatrix = new Matrix4();
@@ -27,7 +27,6 @@ class Bullet extends Geometry {
     this.vertices = this.generateBulletVertices();
     this.faces = { 0: this.vertices };
 
-
     // CALL THIS AT THE END OF ANY SHAPE CONSTRUCTOR
     this.interleaveVertices();
   }
@@ -37,8 +36,8 @@ class Bullet extends Geometry {
 
     //bullet vertices
     var vertex0 = new Vertex(0, 0, 0, [0, 0, 0]); //front
-    var vertex1 = new Vertex(-.01,-.01, 0, this.color); //left bottom
-    var vertex2 = new Vertex(.01, -.01, 0, this.color);  //right bottom
+    var vertex1 = new Vertex(-.005,-.01, 0, this.color); //left bottom
+    var vertex2 = new Vertex(.005, -.01, 0, this.color);  //right bottom
 
     vertices.push(vertex0);
     vertices.push(vertex1);
@@ -52,6 +51,7 @@ class Bullet extends Geometry {
       this.xMom += this.dirVec.elements[0] * .1;
       this.yMom += this.dirVec.elements[1] * .1;
     }
+    
     //Set the rotation matrix to the desired rotation
     this.time++;
     this.xMom += this.dirVec.elements[0] * .03;
