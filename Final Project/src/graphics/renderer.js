@@ -69,7 +69,7 @@ class Renderer {
               var Dist = Math.sqrt((xDiff * xDiff) + (yDiff * yDiff));
 
               if (Dist < nextGeo.size && geometry.time > 5 && nextGeo.time > 5) {
-                var explo = new Explosion(shader2, aX, aY);
+                var explo = new Explosion(shader, aX, aY);
                 this.scene.geometries.splice(i, 1, explo);
               }
             }
@@ -99,8 +99,8 @@ class Renderer {
                 console.log("zap", Dist, nextGeo.size, geometry.time);
                 this.scene.geometries.splice(i, 1);
                 if (nextGeo.size > .1) {
-                  var ast1 = new Asteroid(shader2, nextGeo.size / 2, bX, bY);
-                  var ast2 = new Asteroid(shader2, nextGeo.size / 2, bX, bY);
+                  var ast1 = new Asteroid(shader, nextGeo.size / 2, bX, bY);
+                  var ast2 = new Asteroid(shader, nextGeo.size / 2, bX, bY);
                   this.scene.geometries.splice(f, 1, ast1, ast2);
                 }
                 else this.scene.geometries.splice(f, 1);
@@ -146,7 +146,7 @@ class Renderer {
     //if there are fewer than 6 asteroid in play, add a new one
     if (this.asteroidCount < 6) {
       console.log("adding asteroid");
-      var ast = new Asteroid(shader2, ((Math.random() * 2) + 1) / 10, 1.15, 1.15);
+      var ast = new Asteroid(shader, ((Math.random() * 2) + 1) / 10, 1.15, 1.15);
       this.scene.addGeometry(ast);
     }
 

@@ -33,15 +33,24 @@ class Bullet extends Geometry {
 
   generateBulletVertices() {
     var vertices = []
-
-    //bullet vertices
-    var vertex0 = new Vertex(0, 0, 0, [0, 0, 0]); //front
-    var vertex1 = new Vertex(-.005,-.01, 0, this.color); //left bottom
-    var vertex2 = new Vertex(.005, -.01, 0, this.color);  //right bottom
-
-    vertices.push(vertex0);
-    vertices.push(vertex1);
-    vertices.push(vertex2);
+    var x = 0;
+    var y = 0;
+    var segments = 5;
+    var size = .01;
+    var i = 0;
+        for (i = 0; i < 360; i += (360 / segments)) {
+            var insideCol = Math.random()*255;
+            var seglen = 360 / segments;
+            var angle1 = Math.PI * 2 * i / 360
+            var angle2 = Math.PI * 2 * (i + seglen) / 360
+            var vertex1 = new Vertex(x, y, 0.0, this.color);
+            //var vertex1 = new Vertex(x, y, 0.0, [insideCol, insideCol, insideCol]); //for a different style
+            var vertex2 = new Vertex(x + (Math.sin(angle1) * size), y + (Math.cos(angle1) * size), 0.0, this.color);
+            var vertex3 = new Vertex(x + (Math.sin(angle2) * size), y + (Math.cos(angle2) * size), 0.0, this.color);
+            vertices.push(vertex1);
+            vertices.push(vertex2);
+            vertices.push(vertex3);
+        }
 
     return vertices;
   }

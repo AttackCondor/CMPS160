@@ -1,18 +1,20 @@
 // Vertex Shader
-var ASG1_VSHADER =
+var SHIP_VSHADER =
   `precision mediump float;
   attribute vec4 a_Position;
   attribute vec4 a_Color;
-  varying vec4 v_Color;
   uniform mat4 u_ModelMatrix;
+  uniform bool u_Boost;
+  varying vec4 v_Color;
 
   void main() {
-    v_Color = a_Color;
+    if(a_Color == vec4(1.0, 1.0, 0.0, 1.0) && u_Boost){ v_Color = vec4(1.0, 1.0, 0.0, 1.0);}
+    else {v_Color = a_Color;}
     gl_Position = u_ModelMatrix * a_Position;
   }`;
 
 // Fragment Shader
-var ASG1_FSHADER =
+var SHIP_FSHADER =
   `precision mediump float;
   varying vec4 v_Color;
 

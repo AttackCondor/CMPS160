@@ -17,15 +17,15 @@ class InputHandler {
     this.hudscene = scene;
     this.shootReady = true;
 
-    this.gl = getWebGLContext(canvas);
+    //this.gl = getWebGLContext(canvas);
     _inputHandler = this;
 
     this.image = null;
 
     // Mouse Events
-    this.hud.onmousedown = function (ev) { this.mouseheld = true; _inputHandler.click(ev); };
-    this.hud.onmouseup = function () { this.mouseheld = false; };
-    this.hud.onmousemove = function (ev) { if (this.mouseheld) { _inputHandler.click(ev) } };
+    // this.hud.onmousedown = function (ev) { this.mouseheld = true; _inputHandler.click(ev); };
+    // this.hud.onmouseup = function () { this.mouseheld = false; };
+    // this.hud.onmousemove = function (ev) { if (this.mouseheld) { _inputHandler.click(ev) } };
 
     //button events
     document.getElementById("clear").onclick = function () { _inputHandler.clear(); };
@@ -96,7 +96,7 @@ class InputHandler {
       //space
       var pos = _inputHandler.scene.geometries[0].posVec;
       var dir = _inputHandler.scene.geometries[0].dirVec;
-      var bullet = new Bullet(shader2, pos, dir);
+      var bullet = new Bullet(shader, pos, dir);
       _inputHandler.scene.addGeometry(bullet);
       var objs = [];
       for (var i = 0; i < this.scene.geometries.length; i++) {
