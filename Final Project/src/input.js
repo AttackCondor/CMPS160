@@ -10,18 +10,21 @@ class InputHandler {
   /**
    * Initializes the event handeling functions within the program.
    */
-  constructor(canvas, scene) {
+  constructor(canvas, scene, hud, hudscene) {
     this.canvas = canvas;
     this.scene = scene;
+    this.hud = canvas;
+    this.hudscene = scene;
 
+    this.gl = getWebGLContext(canvas);
     _inputHandler = this;
 
     this.image = null;
 
     // Mouse Events
-    this.canvas.onmousedown = function (ev) { this.mouseheld = true; _inputHandler.click(ev); };
-    this.canvas.onmouseup = function () { this.mouseheld = false; };
-    this.canvas.onmousemove = function (ev) { if (this.mouseheld) { _inputHandler.click(ev) } };
+    this.hud.onmousedown = function (ev) { this.mouseheld = true; _inputHandler.click(ev); };
+    this.hud.onmouseup = function () { this.mouseheld = false; };
+    this.hud.onmousemove = function (ev) { if (this.mouseheld) { _inputHandler.click(ev) } };
 
     //button events
     document.getElementById("clear").onclick = function () { _inputHandler.clear(); };
@@ -39,6 +42,10 @@ class InputHandler {
     //Convert coordinates to webgl style
     var x = (ev.clientX - (canvas.height / 2)) / (canvas.height / 2);
     var y = ((canvas.height / 2) - ev.clientY) / (canvas.height / 2);
+    var pixels = new Uint8Array(4);
+    this.gl.readPixels(0, 0, 1, 1, this.gl.RGBA, this.gl.UNSIGNED_BYTE, pixels);
+    console.log(pixels);
+
   }
 
   clear() {
