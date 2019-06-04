@@ -13,6 +13,7 @@ class Ship extends Geometry {
    */
   constructor(shader) {
     super(shader);
+    this.id = "ship";
     this.xMom = 0;
     this.yMom = 0;
     this.boost = 0;
@@ -24,6 +25,7 @@ class Ship extends Geometry {
     this.rotMatrix = new Matrix4();
     this.transMatrix = new Matrix4();
     this.modelMatrix = new Matrix4();
+    this.time = 0;
 
     this.vertices = this.generateShipVertices();
     this.faces = { 0: this.vertices };
@@ -36,7 +38,6 @@ class Ship extends Geometry {
   generateShipVertices() {
     var vertices = []
 
-    console.log(this.posVec.elements[0]);
     //Left side
     var vertex0 = new Vertex(this.posVec.elements[0], this.posVec.elements[1], 0, [0,0,0]); //center
     var vertex1 = new Vertex(this.posVec.elements[0]-.04, this.posVec.elements[1]-.04, 0, this.color); //left bottom
@@ -67,6 +68,7 @@ class Ship extends Geometry {
   }
 
   render() {
+    this.time++;
     //Set the rotation matrix to the desired rotation
     this.rotMatrix.multiply(new Matrix4().setRotate(this.lrot+this.rrot, 0, 0, 1));
 

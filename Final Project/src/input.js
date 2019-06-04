@@ -24,7 +24,7 @@ class InputHandler {
     this.canvas.onmousemove = function (ev) { if (this.mouseheld) { _inputHandler.click(ev) } };
 
     //button events
-    document.getElementById("clear").onclick = function () { _inputHandler.scene.clearGeometries(); };
+    document.getElementById("clear").onclick = function () { _inputHandler.clear(); };
     document.addEventListener('keydown', function (ev) { _inputHandler.keyDown(ev); }, false);
     document.addEventListener('keyup', function (ev) { _inputHandler.keyUp(ev); }, false);
 
@@ -40,46 +40,65 @@ class InputHandler {
     var x = (ev.clientX - (canvas.height / 2)) / (canvas.height / 2);
     var y = ((canvas.height / 2) - ev.clientY) / (canvas.height / 2);
   }
+
+  clear() {
+    _inputHandler.scene.clearGeometries();
+    var ship = new Ship(shader2);
+    _inputHandler.scene.addGeometry(ship);
+    for (var i = 0; i <= 5; i++) {
+      var ast = new Asteroid(shader2, ((Math.random() * 2) + 1) / 10);
+      _inputHandler.scene.addGeometry(ast);
+    }
+  }
+
   keyUp(ev) {
     var keyName = event.key;
-    //console.log("key up", keyName);
-    if (keyName == "a" || keyName == "A") {
+    if (keyName == "a" || keyName == "A" && _inputHandler.scene.geometries[0].id == "ship") {
       //left
       _inputHandler.scene.geometries[0].lrot = 0;
-      console.log(_inputHandler.scene.geometries[0].dirVec.elements);
     }
-    else if (keyName == "d" || keyName == "D") {
+    else if (keyName == "d" || keyName == "D" && _inputHandler.scene.geometries[0].id == "ship") {
       //right
       _inputHandler.scene.geometries[0].rrot = 0;
-      console.log(_inputHandler.scene.geometries[0].dirVec.elements);
     }
-    else if (keyName == "w" || keyName == "W") {
+    else if (keyName == "w" || keyName == "W" && _inputHandler.scene.geometries[0].id == "ship") {
       //up
       _inputHandler.scene.geometries[0].boost = 0;
     }
-    else if (keyName == "s") {
+    else if (keyName == "s" && _inputHandler.scene.geometries[0].id == "ship") {
       //down
     }
+
   }
 
   keyDown(ev) {
     var keyName = event.key;
-    // console.log("key down", keyName);
-    if (keyName == "a" || keyName == "A") {
+    if (keyName == "a" || keyName == "A" && _inputHandler.scene.geometries[0].id == "ship") {
       //left
       _inputHandler.scene.geometries[0].lrot = 5;
     }
-    else if (keyName == "d" || keyName == "D") {
+    else if (keyName == "d" || keyName == "D" && _inputHandler.scene.geometries[0].id == "ship") {
       //right
       _inputHandler.scene.geometries[0].rrot = -5;
-      //console.log(_inputHandler.scene.geometries[0].dirVec.elements);
     }
-    else if (keyName == "w" || keyName == "W") {
+    else if (keyName == "w" || keyName == "W" && _inputHandler.scene.geometries[0].id == "ship") {
       //up
       _inputHandler.scene.geometries[0].boost = 1;
     }
-    else if (keyName == "s") {
+    else if (keyName == "s" && _inputHandler.scene.geometries[0].id == "ship") {
       //down
+    }
+    else if (keyName == " " && _inputHandler.scene.geometries[0].id == "ship") {
+      //space
+      var pos = _inputHandler.scene.geometries[0].posVec;
+      var dir = _inputHandler.scene.geometries[0].dirVec;
+      var bullet = new Bullet(shader2, pos, dir);
+      _inputHandler.scene.addGeometry(bullet);
+      var objs = [];
+      for (var i = 0; i < this.scene.geometries.length; i++) {
+        objs += _inputHandler.scene.geometries[i].id + "  ";
+      }
+      console.log(objs);
     }
 
   }

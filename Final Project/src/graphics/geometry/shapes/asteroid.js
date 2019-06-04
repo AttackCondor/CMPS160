@@ -12,11 +12,12 @@ class Asteroid extends Geometry {
      * @param {Shader} shader Shading object used to shade geometry
      * @returns {Asteroid} Square created
      */
-    constructor(shader, size) {
+    constructor(shader, size, x, y) {
         super(shader);
 
-        this.x = 1.15;
-        this.y = 1.15;
+        this.id = "ast";
+        this.x = x;
+        this.y = y;
         this.posVec = new Vector3([0, 0, 0]);
         this.size = size;
         this.segments = 8;
@@ -56,6 +57,7 @@ class Asteroid extends Geometry {
         return vertices;
     }
     render() {
+        this.time++;
         this.modelMatrix.multiply(this.translationMatrix);
         this.posVec = this.modelMatrix.multiplyVector3(new Vector3([0, 0, 0]));
         //Bound checking
