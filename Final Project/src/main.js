@@ -10,6 +10,11 @@ function main() {
     console.log("Failed to get WebGL rendering context.");
     return;
   }
+  var hud = getWebGLContext(hud);
+  if (!hud) {
+    console.log("Failed to get WebGL rendering context (hud).");
+    return;
+  }
 
   // Initialize the scene
   var scene = new Scene();
