@@ -4,11 +4,11 @@ var SHIP_VSHADER =
   attribute vec4 a_Position;
   attribute vec4 a_Color;
   uniform mat4 u_ModelMatrix;
-  uniform bool u_Boost;
+  uniform float u_Boost;
   varying vec4 v_Color;
 
   void main() {
-    if(a_Color == vec4(1.0, 1.0, 0.0, 1.0) && u_Boost){ v_Color = vec4(1.0, 1.0, 0.0, 1.0);}
+    if(a_Color == vec4(1.0, 1.0, 0.0, 1.0) && u_Boost == 0.0){ v_Color = vec4(0.0, 0.0, 0.0, 1.0);}
     else {v_Color = a_Color;}
     gl_Position = u_ModelMatrix * a_Position;
   }`;

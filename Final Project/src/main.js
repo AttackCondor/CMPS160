@@ -17,7 +17,7 @@ function main() {
     console.log("Failed to get WebGL rendering context. (hud)");
     //return;
   }
-  console.log(hud);
+  //console.log(hud);
 
   // Initialize the scene
   var scene = new Scene();
@@ -39,17 +39,13 @@ function main() {
   shipshader.addAttribute("a_Position");
   shipshader.addAttribute("a_Color");
   shipshader.addUniform("u_ModelMatrix", "mat4", idMatrix.elements);
-  shipshader.addUniform("u_Boost", "bool", 0);
+  shipshader.addUniform("u_Boost", "float", 1.0);
   //console.log(shipshader.uniforms);
 
 
   //Add geometries to init screen
   var ship = new Ship(shipshader);
   scene.addGeometry(ship);
-  for (var i = 0; i <= 6; i++) {
-    var ast = new Asteroid(shader, ((Math.random() * 2) + 1) / 10, 1.15, 1.15);
-    scene.addGeometry(ast);
-  }
 
   // Initialize renderer with scene and camera
   renderer = new Renderer(gl, scene, null, hud, ctx);
@@ -57,8 +53,8 @@ function main() {
 
   hud.onmousedown = function(ev){
     var x = ev.clientX, y = ev.clientY;
-    console.log(x, y);
-    console.log(renderer.time);
+    //console.log(x, y);
+    //console.log(renderer.time);
     if(x>500 && x<580 && y>30 && y<60) location.reload();
     if(x>500 && x<580 && y>70 && y<100){
        if(renderer.pause == true) renderer.pause = false;

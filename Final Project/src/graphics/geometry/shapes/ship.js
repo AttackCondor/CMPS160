@@ -38,7 +38,7 @@ class Ship extends Geometry {
   generateShipVertices() {
     var vertices = []
 
-    var thrusterColor = [255, 180, 0];
+    var thrusterColor = [255, 255, 0];
     //Left side
     var vertex0 = new Vertex(this.posVec.elements[0], this.posVec.elements[1], 0, [0, 0, 0]); //center
     var vertex1 = new Vertex(this.posVec.elements[0] - .04, this.posVec.elements[1] - .04, 0, this.color); //left bottom
@@ -88,8 +88,7 @@ class Ship extends Geometry {
     this.dirVec.normalize();
     var boosting = 0;
     if (this.boost == 1) {
-      boosting = 1;
-      // console.log("boosting");
+      this.shader.setUniform("u_ModelMatrix", 1.0);      // console.log("boosting");
       // console.log(this.shader.uniforms);
       this.xMom += this.dirVec.elements[0] * .001;
       this.yMom += this.dirVec.elements[1] * .001;
@@ -99,7 +98,7 @@ class Ship extends Geometry {
       if (this.yMom > .03) this.yMom = .025;
     }
     else {
-      boosting = 0;
+      this.shader.setUniform("u_ModelMatrix", 0.0);
       if (this.xMom > 0) this.xMom -= .0003;
       else if (this.xMom < 0) this.xMom += .0003;
       if (this.yMom > 0) this.yMom -= .0003;
@@ -129,7 +128,6 @@ class Ship extends Geometry {
     this.modelMatrix.multiply(this.transMatrix);
     this.modelMatrix.multiply(this.rotMatrix);
     this.shader.setUniform("u_ModelMatrix", this.modelMatrix.elements);
-    this.shader.uniforms["u_Boost"].value = boosting;
     this.modelMatrix = new Matrix4();
   }
 }

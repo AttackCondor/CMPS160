@@ -28,7 +28,7 @@ class InputHandler {
     // this.hud.onmousemove = function (ev) { if (this.mouseheld) { _inputHandler.click(ev) } };
 
     //button events
-    document.getElementById("clear").onclick = function () { _inputHandler.clear(); };
+    //document.getElementById("clear").onclick = function () { _inputHandler.clear(); };
     document.addEventListener('keydown', function (ev) { _inputHandler.keyDown(ev); }, false);
     document.addEventListener('keyup', function (ev) { _inputHandler.keyUp(ev); }, false);
   }
@@ -101,7 +101,7 @@ class InputHandler {
       for (var i = 0; i < this.scene.geometries.length; i++) {
         objs += _inputHandler.scene.geometries[i].id + "  ";
       }
-      console.log(objs);
+      //console.log(objs);
       this.shootReady = false;
     }
 

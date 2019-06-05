@@ -52,17 +52,26 @@ class Renderer {
   render() {
     if (this.time == 1) {
       this.pause = true;
-      // Draw the HUD
+      // Draw the Start Screen
       this.ctx.clearRect(0, 0, 600, 600); // Clear <hud>
       this.ctx.font = '22px "Times New Roman"';
       this.ctx.fillStyle = 'rgba(255, 255, 255, 1)'; // Set white to the color of letters
       this.ctx.fillText('Click Anywhere to Begin', 180, 200);
-      this.ctx.fillText('Controls:', 180, 400);
+      //Controls
+      this.ctx.fillText('Controls:', 130, 390);
       this.ctx.font = '18px "Times New Roman"';
-      this.ctx.fillText('W - Boost forward', 180, 420);
-      this.ctx.fillText('A - Left rotate', 180, 440);
-      this.ctx.fillText('D - Right rotate', 180, 460);
-      this.ctx.fillText('Space - Fire laser', 180, 480);
+      this.ctx.fillText('W - Boost forward', 130, 420);
+      this.ctx.fillText('A - Left rotate', 130, 440);
+      this.ctx.fillText('D - Right rotate', 130, 460);
+      this.ctx.fillText('Space - Fire laser', 130, 480);
+      //Scoring
+      this.ctx.font = '22px "Times New Roman"';
+      this.ctx.fillText('Playing:', 320, 390);
+      this.ctx.font = '18px "Times New Roman"';
+      this.ctx.fillText('-Stay alive as long as possible by', 320, 420);
+      this.ctx.fillText(' avoiding and destroying asteroids.', 320, 440);
+      this.ctx.fillText('-Score is based on time alive', 320, 460);
+      this.ctx.fillText(' and asteroids destroyed.', 320, 480);
     }
     if (!this.pause) {
       if (this.scene.geometries[0].id == "ship") this.time++;
