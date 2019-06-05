@@ -3,7 +3,7 @@ var shader = null;
 function main() {
   // Retrieve the canvas from the HTML document
   canvas = document.getElementById("webgl");
-  //hud = document.getElementById("hud");
+  hud = document.getElementById("hud");
 
   // Retrieve WebGL rendering context
   var gl = getWebGLContext(canvas);
@@ -11,11 +11,13 @@ function main() {
     console.log("Failed to get WebGL rendering context.");
     return;
   }
-  // var ctx = getWebGLContext(hud);
-  // if (!ctx) {
-  //   console.log("Failed to get WebGL rendering context. (hud)");
-  //   //return;
-  // }
+
+  var ctx = hud.getContext('2d');
+  if (!ctx) {
+    console.log("Failed to get WebGL rendering context. (hud)");
+    //return;
+  }
+  console.log(hud);
 
   // Initialize the scene
   var scene = new Scene();
@@ -44,28 +46,29 @@ function main() {
   //Add geometries to init screen
   var ship = new Ship(shipshader);
   scene.addGeometry(ship);
-  for (var i = 0; i <= 3; i++) {
+  for (var i = 0; i <= 6; i++) {
     var ast = new Asteroid(shader, ((Math.random() * 2) + 1) / 10, 1.15, 1.15);
     scene.addGeometry(ast);
   }
 
-
   // Initialize renderer with scene and camera
-  renderer = new Renderer(gl, scene, null);
+  renderer = new Renderer(gl, scene, null, hud, ctx);
   renderer.start();
 
-  console.log(gl);
-  gl.onmousedown = function(ev){
+  hud.onmousedown = function(ev){
     var x = ev.clientX, y = ev.clientY;
-    var rect = ev.target.getBoundingClientRect();
-    var x_in_canvas = x - rect.left, y_in_canvas = rect.bottom - y;
-    var pixels = new Uint8Array(4);
     console.log(x, y);
-    renderer.render();
-    gl.readPixels(x_in_canvas, y_in_canvas, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
-    console.log(pixels);
-
-  }
+    console.log(renderer.time);
+    if(x>500 && x<580 && y>30 && y<60) location.reload();
+    if(x>500 && x<580 && y>70 && y<100){
+       if(renderer.pause == true) renderer.pause = false;
+       else renderer.pause = true;
+    }
+    if(renderer.time == 1){
+      renderer.pause = false;
+      renderer.time += 1;
+    }
+  }  
 
 }
 

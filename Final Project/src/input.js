@@ -14,16 +14,16 @@ class InputHandler {
     this.canvas = canvas;
     this.scene = scene;
     this.hud = canvas;
-    this.hudscene = scene;
-    this.shootReady = true;
+    this.hudscene = hudscene;
 
-    //this.gl = getWebGLContext(canvas);
+    this.gl = getWebGLContext(canvas);
     _inputHandler = this;
+    this.shootReady = true;
 
     this.image = null;
 
     // Mouse Events
-    // this.hud.onmousedown = function (ev) { this.mouseheld = true; _inputHandler.click(ev); };
+    //this.canvas.onmousedown = function (ev) { this.mouseheld = true; _inputHandler.click(ev); };
     // this.hud.onmouseup = function () { this.mouseheld = false; };
     // this.hud.onmousemove = function (ev) { if (this.mouseheld) { _inputHandler.click(ev) } };
 
@@ -31,22 +31,21 @@ class InputHandler {
     document.getElementById("clear").onclick = function () { _inputHandler.clear(); };
     document.addEventListener('keydown', function (ev) { _inputHandler.keyDown(ev); }, false);
     document.addEventListener('keyup', function (ev) { _inputHandler.keyUp(ev); }, false);
-
   }
 
-  /**
-   * Function called upon mouse click.
-   */
-  click(ev) {
-    // Print x,y coordinates.
-    console.log(ev.clientX, ev.clientY);
-    //Convert coordinates to webgl style
-    var x = (ev.clientX - (canvas.height / 2)) / (canvas.height / 2);
-    var y = ((canvas.height / 2) - ev.clientY) / (canvas.height / 2);
-    var pixels = new Uint8Array(4);
-    this.gl.readPixels(0, 0, 1, 1, this.gl.RGBA, this.gl.UNSIGNED_BYTE, pixels);
-    console.log(pixels);
-  }
+  // /**
+  //  * Function called upon mouse click.
+  //  */
+  // click(ev) {
+  //   // Print x,y coordinates.
+  //   console.log(ev.clientX, ev.clientY);
+  //   //Convert coordinates to webgl style
+  //   var x = (ev.clientX - (canvas.height / 2)) / (canvas.height / 2);
+  //   var y = ((canvas.height / 2) - ev.clientY) / (canvas.height / 2);
+  //   var pixels = new Uint8Array(4);
+  //   this.gl.readPixels(0, 0, 1, 1, this.gl.RGBA, this.gl.UNSIGNED_BYTE, pixels);
+  //   console.log(pixels);
+  // }
 
   clear() {
     location.reload();

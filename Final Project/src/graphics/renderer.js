@@ -14,12 +14,16 @@ class Renderer {
    * @constructor
    * @returns {Renderer} Renderer object created
    */
-  constructor(gl, scene, camera) {
+  constructor(gl, scene, camera, hud, ctx) {
     this.gl = gl;
     this.scene = scene;
     this.camera = camera;
+    this.hud = hud;
+    this.ctx = ctx;
     this.time = 0;
     this.asteroidCount = 0;
+    this.pause = false;
+    this.pauseid;
 
     this.textures = {};
 
@@ -39,115 +43,167 @@ class Renderer {
    */
   start() {
     _renderer.render();
-    requestAnimationFrame(_renderer.start);
+    this.pauseid = requestAnimationFrame(_renderer.start);
   }
 
   /**
    * Renders all the geometry within the scene.
    */
   render() {
-    this.time++;
-    this.asteroidCount = 0;
-    // Clear the geometry onscreen
-    this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-
-    //loop for collision detection
-    for (var i = 0; i < this.scene.geometries.length; i++) {
-      var geometry = this.scene.geometries[i];
-      switch (geometry.id) {
-        case "ship":
-          for (var f = 1; f < this.scene.geometries.length; f++) {
-            var nextGeo = this.scene.geometries[f];
-            if (nextGeo.id == "ast") {
-              var aX = geometry.posVec.elements[0];
-              var aY = geometry.posVec.elements[1];
-              var bX = nextGeo.posVec.elements[0];
-              var bY = nextGeo.posVec.elements[1];
-
-              var xDiff = aX - bX;
-              var yDiff = aY - bY;
-              var Dist = Math.sqrt((xDiff * xDiff) + (yDiff * yDiff));
-
-              if (Dist < nextGeo.size && geometry.time > 5 && nextGeo.time > 5) {
-                var explo = new Explosion(shader, aX, aY);
-                this.scene.geometries.splice(i, 1, explo);
-              }
-            }
-          }
-          break;
-
-        case "bullet":
-          if (geometry.time > 30) {
-            this.scene.geometries.splice(i, 1);
-            console.log(geometry.time)
-            console.log(geometry.posVec.elements[0], geometry.posVec.elements[0]);
-            console.log(geometry.transMatrix.elements);
-          }
-          for (var f = 0; f < this.scene.geometries.length; f++) {
-            var nextGeo = this.scene.geometries[f];
-            if (nextGeo.id == "ast") {
-              var aX = geometry.posVec.elements[0];
-              var aY = geometry.posVec.elements[1];
-              var bX = nextGeo.posVec.elements[0];
-              var bY = nextGeo.posVec.elements[1];
-
-              var xDiff = aX - bX;
-              var yDiff = aY - bY;
-              var Dist = Math.sqrt((xDiff * xDiff) + (yDiff * yDiff));
-
-              if (Dist < nextGeo.size && nextGeo.time > 5) {
-                console.log("zap", Dist, nextGeo.size, geometry.time);
-                this.scene.geometries.splice(i, 1);
-                if (nextGeo.size > .1) {
-                  var ast1 = new Asteroid(shader, nextGeo.size / 2, bX, bY);
-                  var ast2 = new Asteroid(shader, nextGeo.size / 2, bX, bY);
-                  this.scene.geometries.splice(f, 1, ast1, ast2);
-                }
-                else this.scene.geometries.splice(f, 1);
-
-              }
-            }
-          }
-          break;
-      }
+    if (this.time == 1) {
+      this.pause = true;
+      // Draw the HUD
+      this.ctx.clearRect(0, 0, 600, 600); // Clear <hud>
+      this.ctx.font = '22px "Times New Roman"';
+      this.ctx.fillStyle = 'rgba(255, 255, 255, 1)'; // Set white to the color of letters
+      this.ctx.fillText('Click Anywhere to Begin', 180, 200);
+      this.ctx.fillText('Controls:', 180, 400);
+      this.ctx.font = '18px "Times New Roman"';
+      this.ctx.fillText('W - Boost forward', 180, 420);
+      this.ctx.fillText('A - Left rotate', 180, 440);
+      this.ctx.fillText('D - Right rotate', 180, 460);
+      this.ctx.fillText('Space - Fire laser', 180, 480);
     }
+    if (!this.pause) {
+      if (this.scene.geometries[0].id == "ship") this.time++;
+      this.asteroidCount = 0;
+      // Clear the geometry onscreen
+      this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
-    //loop for rendering geometries
-    for (var i = 0; i < this.scene.geometries.length; i++) {
-      var geometry = this.scene.geometries[i];
+      //loop for collision detection
+      for (var i = 0; i < this.scene.geometries.length; i++) {
+        var geometry = this.scene.geometries[i];
+        switch (geometry.id) {
+          case "ship":
+            for (var f = 1; f < this.scene.geometries.length; f++) {
+              var nextGeo = this.scene.geometries[f];
+              if (nextGeo.id == "ast") {
+                var aX = geometry.posVec.elements[0];
+                var aY = geometry.posVec.elements[1];
+                var bX = nextGeo.posVec.elements[0];
+                var bY = nextGeo.posVec.elements[1];
 
-      // Switch to shader attached to geometry
-      this.gl.useProgram(geometry.shader.program)
-      this.gl.program = geometry.shader.program
+                var xDiff = aX - bX;
+                var yDiff = aY - bY;
+                var Dist = Math.sqrt((xDiff * xDiff) + (yDiff * yDiff));
 
-      // Callback function in the case user wants to change the
-      // geometry before the draw call
-      geometry.render();
+                if (Dist < nextGeo.size && geometry.time > 5 && nextGeo.time > 5) {
+                  var explo = new Explosion(shader, aX, aY);
+                  this.scene.geometries.splice(i, 1, explo);
+                }
+              }
+            }
+            break;
 
-      if (geometry.image != null) {
-        if (!(geometry.image.src in this.textures)) {
-          // Create a texture object and store id using its path as key
-          this.textures[geometry.image.src] = this.gl.createTexture();
-          this.loadTexture(this.textures[geometry.image.src], geometry.image);
+          case "bullet":
+            if (geometry.time > 30) {
+              this.scene.geometries.splice(i, 1);
+              // console.log(geometry.time)
+              // console.log(geometry.posVec.elements[0], geometry.posVec.elements[0]);
+              // console.log(geometry.transMatrix.elements);
+            }
+            for (var f = 0; f < this.scene.geometries.length; f++) {
+              var nextGeo = this.scene.geometries[f];
+              if (nextGeo.id == "ast") {
+                var aX = geometry.posVec.elements[0];
+                var aY = geometry.posVec.elements[1];
+                var bX = nextGeo.posVec.elements[0];
+                var bY = nextGeo.posVec.elements[1];
+
+                var xDiff = aX - bX;
+                var yDiff = aY - bY;
+                var Dist = Math.sqrt((xDiff * xDiff) + (yDiff * yDiff));
+
+                if (Dist < nextGeo.size && nextGeo.time > 5) {
+                  //console.log("zap", Dist, nextGeo.size, geometry.time);
+                  this.time += 100;
+                  this.scene.geometries.splice(i, 1);
+                  if (nextGeo.size > .1) {
+                    var ast1 = new Asteroid(shader, nextGeo.size / 2, bX, bY);
+                    var ast2 = new Asteroid(shader, nextGeo.size / 2, bX, bY);
+                    this.scene.geometries.splice(f, 1, ast1, ast2);
+                  }
+                  else this.scene.geometries.splice(f, 1);
+
+                }
+              }
+            }
+            break;
         }
       }
 
-      //count how many asteroids are in play
-      if (geometry.id == "ast") this.asteroidCount++;
+      //loop for rendering geometries
+      for (var i = 0; i < this.scene.geometries.length; i++) {
+        var geometry = this.scene.geometries[i];
 
-      // Draw geometry
-      this.sendVertexDataToGLSL(geometry.data, geometry.dataCounts, geometry.shader);
-      this.sendIndicesToGLSL(geometry.indices);
+        // Switch to shader attached to geometry
+        this.gl.useProgram(geometry.shader.program)
+        this.gl.program = geometry.shader.program
 
-      this.drawBuffer(geometry.indices.length)
-    }
+        // Callback function in the case user wants to change the
+        // geometry before the draw call
+        geometry.render();
 
-    //Method to repopulate asteroids
-    //if there are fewer than 6 asteroid in play, add a new one
-    if (this.asteroidCount < 6) {
-      console.log("adding asteroid");
-      var ast = new Asteroid(shader, ((Math.random() * 2) + 1) / 10, 1.15, 1.15);
-      this.scene.addGeometry(ast);
+        if (geometry.image != null) {
+          if (!(geometry.image.src in this.textures)) {
+            // Create a texture object and store id using its path as key
+            this.textures[geometry.image.src] = this.gl.createTexture();
+            this.loadTexture(this.textures[geometry.image.src], geometry.image);
+          }
+        }
+
+        //count how many asteroids are in play
+        if (geometry.id == "ast") this.asteroidCount++;
+
+        // Draw geometry
+        this.sendVertexDataToGLSL(geometry.data, geometry.dataCounts, geometry.shader);
+        this.sendIndicesToGLSL(geometry.indices);
+
+        this.drawBuffer(geometry.indices.length)
+      }
+
+      //Method to repopulate asteroids
+      //if there are fewer than 6 asteroid in play, add a new one
+      if (this.asteroidCount < 8 && this.scene.geometries[0].id == "ship") {
+        //console.log("adding asteroid");
+        var ast = new Asteroid(shader, ((Math.random() * 2) + 1) / 10, 1.15, 1.15);
+        this.scene.addGeometry(ast);
+      }
+
+
+      // Draw the HUD
+      this.ctx.clearRect(0, 0, 600, 600); // Clear <hud>
+      this.ctx.font = '18px "Times New Roman"';
+      this.ctx.fillStyle = 'rgba(255, 255, 255, 1)'; // Set white to the color of letters
+      this.ctx.fillText('Current Score: ' + Math.round(this.time / 5), 20, 50);
+      //restart button
+      this.ctx.fillStyle = 'rgba(0, 0, 0, 1)'; // Set black to the color
+      this.ctx.fillRect(500, 30, 80, 30);
+      this.ctx.fillStyle = 'rgba(255, 255, 255, 1)'; // Set white to the color of letters
+      this.ctx.fillText('Restart', 515, 50);
+      this.ctx.beginPath();                      // Start drawing
+      this.ctx.moveTo(500, 30); this.ctx.lineTo(580, 30); this.ctx.lineTo(580, 60); this.ctx.lineTo(500, 60);
+      this.ctx.closePath();
+      this.ctx.strokeStyle = 'rgba(255, 255, 255, 1)'; // Set white to color of lines
+      this.ctx.stroke();
+      //pause button
+      this.ctx.fillStyle = 'rgba(0, 0, 0, 1)'; // Set black to the color
+      this.ctx.fillRect(500, 70, 80, 30);
+      this.ctx.fillStyle = 'rgba(255, 255, 255, 1)'; // Set white to the color of letters
+      this.ctx.fillText('Pause', 520, 90);
+      this.ctx.beginPath();                      // Start drawing
+      this.ctx.moveTo(500, 70); this.ctx.lineTo(580, 70); this.ctx.lineTo(580, 100); this.ctx.lineTo(500, 100);
+      this.ctx.closePath();
+      this.ctx.strokeStyle = 'rgba(255, 255, 255, 1)'; // Set white to color of lines
+      this.ctx.stroke();
+      //if game over
+      if (this.scene.geometries[0].id != "ship") {
+        this.ctx.font = '64px "Times New Roman"';
+        this.ctx.fillStyle = 'rgba(255, 0, 0, 1)'; // Set red to the color of letters
+        this.ctx.fillText('Game Over', 150, 250);
+        this.ctx.fillStyle = 'rgba(255, 255, 255, 1)'; // Set white to color of text
+        this.ctx.fillText('Final Score: ' + Math.round(this.time / 5), 50, 325);
+      }
     }
 
   }
